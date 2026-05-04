@@ -1,0 +1,539 @@
+pipeline:
+  name: Observability Demo - Dual Stack Deployment
+  identifier: observability_demo_dual_stack
+  projectIdentifier: <YOUR_PROJECT_ID>
+  orgIdentifier: <YOUR_ORG_ID>
+  tags:
+    observability: "dual-stack"
+    chaos: "enabled"
+  
+  # Pipeline variables to control observability stack
+  variables:
+    - name: observability_stack
+      type: String
+      description: "Choose observability stack: otel-prometheus or dynatrace"
+      required: true
+      value: otel-prometheus
+      allowedValues:
+        - otel-prometheus
+        - dynatrace
+    
+    - name: enable_chaos
+      type: String
+      description: "Enable chaos experiments"
+      required: true
+      value: "true"
+      allowedValues:
+        - "true"
+        - "false"
+    
+    - name: chaos_experiment_type
+      type: String
+      description: "Type of chaos experiment to run"
+      required: false
+      value: "network-delay"
+      allowedValues:
+        - "network-delay"
+        - "pod-failure"
+        - "cpu-stress"
+        - "all"
+  
+  stages:
+    # ===========================================================================
+    # STAGE 1: BUILD & PUSH DOCKER IMAGE
+    # ===========================================================================
+    - stage:
+        name: Build and Push
+        identifier: build_and_push
+        type: CI
+        spec:
+          cloneCodebase: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: <YOUR_K8S_CONNECTOR>
+              namespace: harness-delegate
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: Build and Push Docker Image
+                  identifier: build_push_docker
+                  spec:
+                    connectorRef: <YOUR_DOCKER_CONNECTOR>
+                    repo: <YOUR_DOCKER_REPO>/python-observability-app
+                    tags:
+                      - <+pipeline.sequenceId>
+                      - latest
+                      - <+pipeline.variables.observability_stack>
+                    dockerfile: Dockerfile
+                    context: .
+                    labels:
+                      observability_stack: <+pipeline.variables.observability_stack>
+                      build_number: <+pipeline.sequenceId>
+                    buildArgs:
+                      BUILD_DATE: <+pipeline.startTs>
+                    optimize: true
+    
+    # ===========================================================================
+    # STAGE 2: DEPLOY APPLICATION
+    # ===========================================================================
+    - stage:
+        name: Deploy Application
+        identifier: deploy_application
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: python_observability_app
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources:
+                        - identifier: docker_image
+                          type: DockerRegistry
+                          spec:
+                            tag: <+pipeline.sequenceId>
+          
+          environment:
+            environmentRef: production
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: k8s_cluster
+          
+          execution:
+            steps:
+              # Pre-deployment: Prepare manifest based on observability stack
+              - step:
+                  type: ShellScript
+                  name: Prepare Manifest
+                  identifier: prepare_manifest
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          STACK="<+pipeline.variables.observability_stack>"
+                          echo "Preparing manifest for stack: $STACK"
+                          
+                          # Copy manifest
+                          cp k8s-manifest.yaml k8s-manifest-prepared.yaml
+                          
+                          if [ "$STACK" == "dynatrace" ]; then
+                            echo "Configuring for Dynatrace stack..."
+                            # Comment out Stack A, uncomment Stack B
+                            sed -i 's/^  OBSERVABILITY_STACK: "otel-prometheus"/  OBSERVABILITY_STACK: "dynatrace"/' k8s-manifest-prepared.yaml
+                            
+                            # You would add logic here to comment/uncomment sections
+                            # For production, consider using kustomize or helm
+                            
+                          else
+                            echo "Configuring for OpenTelemetry + Prometheus + Grafana stack..."
+                            # Ensure Stack A is uncommented, Stack B is commented
+                          fi
+                          
+                          echo "Manifest prepared successfully"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 5m
+              
+              # Deploy Kubernetes manifests
+              - step:
+                  type: K8sApply
+                  name: Deploy Observability Stack
+                  identifier: deploy_observability_stack
+                  spec:
+                    filePaths:
+                      - k8s-manifest-prepared.yaml
+                    skipDryRun: false
+                    skipSteadyStateCheck: false
+                    skipRendering: false
+                  timeout: 10m
+              
+              # Wait for deployment to stabilize
+              - step:
+                  type: K8sRollingDeploy
+                  name: Rolling Deploy Application
+                  identifier: rolling_deploy
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+                  timeout: 10m
+              
+              # Verify deployment health
+              - step:
+                  type: ShellScript
+                  name: Verify Deployment
+                  identifier: verify_deployment
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "Verifying application health..."
+                          
+                          # Check pod status
+                          kubectl get pods -n observability-demo -l app=python-app
+                          
+                          # Check if pods are ready
+                          READY=$(kubectl get pods -n observability-demo -l app=python-app -o jsonpath='{.items[*].status.conditions[?(@.type=="Ready")].status}')
+                          
+                          if [[ "$READY" == *"False"* ]]; then
+                            echo "ERROR: Some pods are not ready"
+                            exit 1
+                          fi
+                          
+                          echo "All pods are healthy"
+                          
+                          # Test application endpoint
+                          APP_IP=$(kubectl get svc python-app -n observability-demo -o jsonpath='{.spec.clusterIP}')
+                          curl -f http://$APP_IP:8080/health || exit 1
+                          
+                          echo "Application is responding correctly"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 5m
+        
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
+    
+    # ===========================================================================
+    # STAGE 3: CHAOS ENGINEERING EXPERIMENTS
+    # ===========================================================================
+    - stage:
+        name: Chaos Engineering
+        identifier: chaos_engineering
+        type: Custom
+        when:
+          condition: <+pipeline.variables.enable_chaos> == "true"
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Inject Chaos - Network Delay
+                  identifier: chaos_network_delay
+                  when:
+                    condition: <+pipeline.variables.chaos_experiment_type> == "network-delay" || <+pipeline.variables.chaos_experiment_type> == "all"
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "Injecting network latency chaos..."
+                          
+                          cat <<EOF | kubectl apply -f -
+                          apiVersion: chaos-mesh.org/v1alpha1
+                          kind: NetworkChaos
+                          metadata:
+                            name: network-delay-test
+                            namespace: observability-demo
+                          spec:
+                            action: delay
+                            mode: one
+                            selector:
+                              namespaces:
+                              - observability-demo
+                              labelSelectors:
+                                app: python-app
+                            delay:
+                              latency: "200ms"
+                              correlation: "100"
+                              jitter: "50ms"
+                            duration: "2m"
+                          EOF
+                          
+                          echo "Chaos experiment started. Monitoring for 2 minutes..."
+                          sleep 120
+                          
+                          echo "Cleaning up chaos experiment..."
+                          kubectl delete networkchaos network-delay-test -n observability-demo
+                          
+                          echo "Network chaos experiment completed"
+                    environmentVariables: []
+                    outputVariables:
+                      - name: chaos_start_time
+                        type: String
+                        value: startTime
+                      - name: chaos_end_time
+                        type: String
+                        value: endTime
+                  timeout: 5m
+              
+              - step:
+                  type: ShellScript
+                  name: Inject Chaos - Pod Failure
+                  identifier: chaos_pod_failure
+                  when:
+                    condition: <+pipeline.variables.chaos_experiment_type> == "pod-failure" || <+pipeline.variables.chaos_experiment_type> == "all"
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "Injecting pod failure chaos..."
+                          
+                          cat <<EOF | kubectl apply -f -
+                          apiVersion: chaos-mesh.org/v1alpha1
+                          kind: PodChaos
+                          metadata:
+                            name: pod-failure-test
+                            namespace: observability-demo
+                          spec:
+                            action: pod-kill
+                            mode: one
+                            selector:
+                              namespaces:
+                              - observability-demo
+                              labelSelectors:
+                                app: python-app
+                            duration: "30s"
+                          EOF
+                          
+                          echo "Chaos experiment started. Monitoring pod recovery..."
+                          sleep 60
+                          
+                          kubectl delete podchaos pod-failure-test -n observability-demo
+                          
+                          echo "Pod failure chaos experiment completed"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 3m
+              
+              - step:
+                  type: ShellScript
+                  name: Inject Chaos - CPU Stress
+                  identifier: chaos_cpu_stress
+                  when:
+                    condition: <+pipeline.variables.chaos_experiment_type> == "cpu-stress" || <+pipeline.variables.chaos_experiment_type> == "all"
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          echo "Injecting CPU stress chaos..."
+                          
+                          cat <<EOF | kubectl apply -f -
+                          apiVersion: chaos-mesh.org/v1alpha1
+                          kind: StressChaos
+                          metadata:
+                            name: cpu-stress-test
+                            namespace: observability-demo
+                          spec:
+                            mode: one
+                            selector:
+                              namespaces:
+                              - observability-demo
+                              labelSelectors:
+                                app: python-app
+                            stressors:
+                              cpu:
+                                workers: 2
+                                load: 90
+                            duration: "2m"
+                          EOF
+                          
+                          echo "Chaos experiment started. Monitoring CPU impact..."
+                          sleep 130
+                          
+                          kubectl delete stresschaos cpu-stress-test -n observability-demo
+                          
+                          echo "CPU stress chaos experiment completed"
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 4m
+              
+              # Collect observability data after chaos
+              - step:
+                  type: ShellScript
+                  name: Collect Chaos Metrics
+                  identifier: collect_chaos_metrics
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          STACK="<+pipeline.variables.observability_stack>"
+                          
+                          echo "Collecting metrics from $STACK stack..."
+                          
+                          if [ "$STACK" == "otel-prometheus" ]; then
+                            # Query Prometheus for chaos impact
+                            PROM_URL="http://prometheus.observability-demo.svc.cluster.local:9090"
+                            
+                            echo "Querying Prometheus for error rates during chaos..."
+                            curl -s "$PROM_URL/api/v1/query?query=rate(app_requests_total{status=~\"5..\"}[5m])"
+                            
+                            echo "Querying for latency percentiles..."
+                            curl -s "$PROM_URL/api/v1/query?query=histogram_quantile(0.95, rate(app_request_duration_seconds_bucket[5m]))"
+                            
+                          else
+                            echo "Dynatrace stack - metrics available in Dynatrace UI"
+                            echo "Check: https://YOUR_ENV.live.dynatrace.com"
+                          fi
+                          
+                          echo "Metrics collection completed"
+                    environmentVariables: []
+                    outputVariables:
+                      - name: error_rate
+                        type: String
+                        value: errorRate
+                      - name: p95_latency
+                        type: String
+                        value: p95Latency
+                  timeout: 3m
+    
+    # ===========================================================================
+    # STAGE 4: VERIFICATION & REPORTING
+    # ===========================================================================
+    - stage:
+        name: Verification and Reporting
+        identifier: verification_reporting
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: Generate Observability Report
+                  identifier: generate_report
+                  spec:
+                    shell: Bash
+                    onDelegate: true
+                    source:
+                      type: Inline
+                      spec:
+                        script: |
+                          #!/bin/bash
+                          set -e
+                          
+                          STACK="<+pipeline.variables.observability_stack>"
+                          CHAOS_ENABLED="<+pipeline.variables.enable_chaos>"
+                          
+                          echo "=========================================="
+                          echo "OBSERVABILITY DEPLOYMENT REPORT"
+                          echo "=========================================="
+                          echo "Observability Stack: $STACK"
+                          echo "Chaos Testing: $CHAOS_ENABLED"
+                          echo "Build Number: <+pipeline.sequenceId>"
+                          echo "Deployment Time: $(date)"
+                          echo ""
+                          
+                          if [ "$STACK" == "otel-prometheus" ]; then
+                            echo "Access URLs:"
+                            echo "  - Application: http://python-app.local"
+                            echo "  - Grafana: http://grafana.local (admin/admin)"
+                            echo "  - Prometheus: http://prometheus.observability-demo.svc.cluster.local:9090"
+                            echo ""
+                            echo "Dashboards to check:"
+                            echo "  1. Application Performance (Grafana)"
+                            echo "  2. Request Rate & Latency"
+                            echo "  3. Error Rate"
+                            echo "  4. Distributed Traces (Tempo)"
+                            
+                          else
+                            echo "Access URLs:"
+                            echo "  - Application: http://python-app.local"
+                            echo "  - Dynatrace: https://YOUR_ENV.live.dynatrace.com"
+                            echo ""
+                            echo "Dynatrace Views:"
+                            echo "  1. Services > python-app"
+                            echo "  2. Distributed Traces"
+                            echo "  3. Metrics Browser"
+                            echo "  4. Problems & Events"
+                          fi
+                          
+                          if [ "$CHAOS_ENABLED" == "true" ]; then
+                            echo ""
+                            echo "Chaos Experiments Executed:"
+                            echo "  - Type: <+pipeline.variables.chaos_experiment_type>"
+                            echo "  - Check observability stack for anomalies"
+                            echo "  - Review error rates and latency spikes"
+                          fi
+                          
+                          echo "=========================================="
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 2m
+              
+              - step:
+                  type: Email
+                  name: Send Deployment Notification
+                  identifier: send_email
+                  spec:
+                    to: devops-team@example.com
+                    subject: "Observability Demo Deployed - <+pipeline.variables.observability_stack> Stack"
+                    body: |
+                      Deployment completed successfully!
+                      
+                      Stack: <+pipeline.variables.observability_stack>
+                      Build: <+pipeline.sequenceId>
+                      Chaos Testing: <+pipeline.variables.enable_chaos>
+                      
+                      Check the observability dashboards for metrics and traces.
+                  timeout: 1m
+  
+  # Notification rules
+  notificationRules:
+    - name: Pipeline Failure
+      identifier: pipeline_failure
+      pipelineEvents:
+        - type: PipelineFailed
+      notificationMethod:
+        type: Email
+        spec:
+          userGroups: []
+          recipients:
+            - devops-team@example.com
+    
+    - name: Chaos Experiment Alert
+      identifier: chaos_experiment_alert
+      pipelineEvents:
+        - type: StageSuccess
+          forStages:
+            - chaos_engineering
+      notificationMethod:
+        type: Slack
+        spec:
+          webhookUrl: <YOUR_SLACK_WEBHOOK>

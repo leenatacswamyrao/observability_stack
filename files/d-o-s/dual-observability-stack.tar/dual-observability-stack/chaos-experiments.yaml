@@ -1,0 +1,452 @@
+# ==============================================================================
+# CHAOS EXPERIMENT TEMPLATES
+# ==============================================================================
+# Collection of pre-configured chaos experiments for testing resilience
+# Apply these to test different failure scenarios
+# ==============================================================================
+
+---
+# ==============================================================================
+# 1. NETWORK CHAOS - Latency Injection
+# ==============================================================================
+# Use case: Test application timeout handling and user experience degradation
+# Expected impact: Increased latency, potential timeouts
+# Duration: 3 minutes
+# ==============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-latency-mild
+  namespace: observability-demo
+  annotations:
+    description: "Mild network latency - simulates slow network conditions"
+spec:
+  action: delay
+  mode: all  # Affects all matching pods
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  delay:
+    latency: "100ms"
+    correlation: "100"
+    jitter: "25ms"
+  duration: "3m"
+
+---
+# Severe network latency
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-latency-severe
+  namespace: observability-demo
+  annotations:
+    description: "Severe network latency - simulates degraded network"
+spec:
+  action: delay
+  mode: one  # Affects one random pod
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  delay:
+    latency: "500ms"
+    correlation: "100"
+    jitter: "200ms"
+  duration: "2m"
+
+---
+# Network packet loss
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-packet-loss
+  namespace: observability-demo
+  annotations:
+    description: "Packet loss - simulates unreliable network"
+spec:
+  action: loss
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  loss:
+    loss: "25"
+    correlation: "100"
+  duration: "2m"
+
+---
+# Network partition (split brain)
+apiVersion: chaos-mesh.org/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: network-partition
+  namespace: observability-demo
+  annotations:
+    description: "Network partition - simulates split brain scenario"
+spec:
+  action: partition
+  mode: all
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  direction: both
+  target:
+    mode: all
+    selector:
+      namespaces:
+        - observability-demo
+      labelSelectors:
+        app: otel-collector
+  duration: "1m"
+
+---
+# ==============================================================================
+# 2. POD CHAOS - Pod Failures
+# ==============================================================================
+# Use case: Test high availability and pod recovery
+# Expected impact: Temporary service disruption, pod restarts
+# ==============================================================================
+
+# Pod kill - immediate termination
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: pod-kill-random
+  namespace: observability-demo
+  annotations:
+    description: "Randomly kill one pod to test recovery"
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  duration: "15s"
+  scheduler:
+    cron: "@every 5m"  # Repeat every 5 minutes
+
+---
+# Pod failure - graceful termination
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: pod-failure-graceful
+  namespace: observability-demo
+  annotations:
+    description: "Graceful pod termination"
+spec:
+  action: pod-failure
+  mode: fixed-percent
+  value: "33"  # Affects 33% of pods
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  duration: "1m"
+
+---
+# Container kill - kill specific container in pod
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata:
+  name: container-kill
+  namespace: observability-demo
+  annotations:
+    description: "Kill application container only"
+spec:
+  action: container-kill
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  containerNames:
+    - python-app
+  duration: "30s"
+
+---
+# ==============================================================================
+# 3. STRESS CHAOS - Resource Exhaustion
+# ==============================================================================
+# Use case: Test application behavior under resource pressure
+# Expected impact: High CPU/memory usage, potential throttling
+# ==============================================================================
+
+# CPU stress - high CPU load
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: cpu-stress-high
+  namespace: observability-demo
+  annotations:
+    description: "High CPU stress - 90% utilization"
+spec:
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  stressors:
+    cpu:
+      workers: 2
+      load: 90
+  duration: "3m"
+
+---
+# Memory stress
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: memory-stress
+  namespace: observability-demo
+  annotations:
+    description: "Memory stress - allocate 256MB"
+spec:
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  stressors:
+    memory:
+      workers: 1
+      size: "256MB"
+  duration: "2m"
+
+---
+# Combined CPU + Memory stress
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata:
+  name: combined-stress
+  namespace: observability-demo
+  annotations:
+    description: "Combined CPU and memory stress"
+spec:
+  mode: all
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  stressors:
+    cpu:
+      workers: 1
+      load: 80
+    memory:
+      workers: 1
+      size: "128MB"
+  duration: "2m"
+
+---
+# ==============================================================================
+# 4. TIME CHAOS - Clock Skew
+# ==============================================================================
+# Use case: Test time-sensitive operations and distributed systems
+# Expected impact: Timestamp inconsistencies, cache issues
+# ==============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: TimeChaos
+metadata:
+  name: time-skew
+  namespace: observability-demo
+  annotations:
+    description: "Time skew - clock offset"
+spec:
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  timeOffset: "-1h"
+  duration: "1m"
+
+---
+# ==============================================================================
+# 5. HTTP CHAOS - Application-Layer Failures
+# ==============================================================================
+# Use case: Test error handling and retry logic
+# Expected impact: HTTP errors, aborted connections
+# ==============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: HTTPChaos
+metadata:
+  name: http-abort
+  namespace: observability-demo
+  annotations:
+    description: "Abort HTTP requests with 500 error"
+spec:
+  mode: all
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  target: Request
+  port: 8080
+  method: POST
+  path: "/api/process"
+  abort: true
+  duration: "1m"
+
+---
+# HTTP delay
+apiVersion: chaos-mesh.org/v1alpha1
+kind: HTTPChaos
+metadata:
+  name: http-delay
+  namespace: observability-demo
+  annotations:
+    description: "Delay HTTP responses"
+spec:
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  target: Response
+  port: 8080
+  path: "/api/*"
+  delay: "3s"
+  duration: "2m"
+
+---
+# ==============================================================================
+# 6. IO CHAOS - Disk Failures
+# ==============================================================================
+# Use case: Test disk I/O error handling
+# Expected impact: Write/read failures, latency
+# ==============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: IOChaos
+metadata:
+  name: io-latency
+  namespace: observability-demo
+  annotations:
+    description: "I/O latency injection"
+spec:
+  action: latency
+  mode: one
+  selector:
+    namespaces:
+      - observability-demo
+    labelSelectors:
+      app: python-app
+  volumePath: /tmp
+  path: "/tmp/*"
+  delay: "100ms"
+  percent: 50
+  duration: "2m"
+
+---
+# ==============================================================================
+# 7. WORKFLOW - Combined Chaos Scenarios
+# ==============================================================================
+# Use case: Real-world failure scenarios with multiple chaos types
+# ==============================================================================
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Workflow
+metadata:
+  name: realistic-failure-scenario
+  namespace: observability-demo
+  annotations:
+    description: "Realistic failure scenario: gradual degradation"
+spec:
+  entry: the-entry
+  templates:
+    - name: the-entry
+      templateType: Serial
+      deadline: 10m
+      children:
+        - network-degradation
+        - resource-pressure
+        - pod-failure
+        - recovery-verification
+    
+    - name: network-degradation
+      templateType: NetworkChaos
+      deadline: 2m
+      networkChaos:
+        action: delay
+        mode: all
+        selector:
+          namespaces: [observability-demo]
+          labelSelectors:
+            app: python-app
+        delay:
+          latency: "200ms"
+          jitter: "50ms"
+        duration: "2m"
+    
+    - name: resource-pressure
+      templateType: StressChaos
+      deadline: 3m
+      stressChaos:
+        mode: one
+        selector:
+          namespaces: [observability-demo]
+          labelSelectors:
+            app: python-app
+        stressors:
+          cpu:
+            workers: 1
+            load: 85
+        duration: "2m"
+    
+    - name: pod-failure
+      templateType: PodChaos
+      deadline: 1m
+      podChaos:
+        action: pod-kill
+        mode: one
+        selector:
+          namespaces: [observability-demo]
+          labelSelectors:
+            app: python-app
+    
+    - name: recovery-verification
+      templateType: Suspend
+      deadline: 1m
+
+---
+# ==============================================================================
+# USAGE EXAMPLES
+# ==============================================================================
+# 
+# 1. Apply single experiment:
+#    kubectl apply -f chaos-experiments.yaml -l experiment=network-latency-mild
+#
+# 2. Apply all experiments at once (NOT RECOMMENDED):
+#    kubectl apply -f chaos-experiments.yaml
+#
+# 3. Run specific experiment:
+#    kubectl apply -f - <<EOF
+#    (copy one experiment block here)
+#    EOF
+#
+# 4. Monitor chaos impact:
+#    kubectl get networkchaos,podchaos,stresschaos -n observability-demo
+#    kubectl describe networkchaos network-latency-mild -n observability-demo
+#
+# 5. Cleanup experiments:
+#    kubectl delete networkchaos,podchaos,stresschaos --all -n observability-demo
+#
+# 6. Scheduled chaos (game days):
+#    Use the 'scheduler' field with cron expressions
+#
+# ==============================================================================

@@ -1,0 +1,52 @@
+service:
+  name: Python Observability App
+  identifier: python_observability_app
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      manifests:
+        - manifest:
+            identifier: k8s_manifest
+            type: K8sManifest
+            spec:
+              store:
+                type: Git
+                spec:
+                  connectorRef: <YOUR_GIT_CONNECTOR>
+                  gitFetchType: Branch
+                  branch: main
+                  paths:
+                    - k8s-manifest.yaml
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+      
+      artifacts:
+        primary:
+          primaryArtifactRef: docker_image
+          sources:
+            - identifier: docker_image
+              spec:
+                connectorRef: <YOUR_DOCKER_CONNECTOR>
+                imagePath: <YOUR_DOCKER_REPO>/python-observability-app
+                tag: <+input>
+              type: DockerRegistry
+      
+      variables:
+        - name: observability_stack
+          type: String
+          description: "Observability stack to deploy"
+          value: <+pipeline.variables.observability_stack>
+        
+        - name: namespace
+          type: String
+          description: "Kubernetes namespace"
+          value: observability-demo
+  
+  gitOpsEnabled: false
+  
+  description: "Multi-container Python application with dual observability stack support (OpenTelemetry+Prometheus+Grafana or Dynatrace)"
+  
+  tags:
+    observability: dual-stack
+    language: python
+    chaos: enabled

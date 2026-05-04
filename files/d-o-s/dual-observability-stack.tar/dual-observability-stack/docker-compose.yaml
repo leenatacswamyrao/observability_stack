@@ -1,0 +1,140 @@
+version: '3.8'
+
+# ==============================================================================
+# Docker Compose - Local Testing Environment
+# ==============================================================================
+# This allows you to test the observability stack locally before deploying to K8s
+#
+# Usage:
+#   docker-compose up -d                    # Start Stack A (default)
+#   STACK=dynatrace docker-compose up -d    # Start with Dynatrace
+# ==============================================================================
+
+services:
+  # ===========================================================================
+  # Application
+  # ===========================================================================
+  python-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - OBSERVABILITY_STACK=${STACK:-otel-prometheus}
+      - SERVICE_NAME=python-app
+      - ENVIRONMENT=local
+      - PORT=8080
+      - OTEL_ENDPOINT=otel-collector:4317
+      # Uncomment for Dynatrace
+      # - DYNATRACE_ENDPOINT=${DYNATRACE_ENDPOINT}
+      # - DYNATRACE_TOKEN=${DYNATRACE_TOKEN}
+    networks:
+      - observability
+    depends_on:
+      - otel-collector
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ===========================================================================
+  # Stack A: OpenTelemetry + Prometheus + Grafana
+  # ===========================================================================
+  
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.91.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "8889:8889"   # Prometheus metrics
+    networks:
+      - observability
+    profiles:
+      - otel
+
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - observability
+    profiles:
+      - otel
+
+  tempo:
+    image: grafana/tempo:2.3.0
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./config/tempo.yaml:/etc/tempo.yaml
+      - tempo-data:/tmp/tempo
+    ports:
+      - "3200:3200"   # Tempo HTTP
+      - "4317"        # OTLP gRPC
+    networks:
+      - observability
+    profiles:
+      - otel
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - observability
+    depends_on:
+      - prometheus
+      - tempo
+    profiles:
+      - otel
+
+networks:
+  observability:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  tempo-data:
+
+# ==============================================================================
+# Usage Examples:
+# ==============================================================================
+#
+# 1. Start with OpenTelemetry stack:
+#    docker-compose --profile otel up -d
+#
+# 2. View logs:
+#    docker-compose logs -f python-app
+#
+# 3. Test application:
+#    curl http://localhost:8080/
+#    curl -X POST http://localhost:8080/api/process -H "Content-Type: application/json" -d '{"test": "data"}'
+#
+# 4. Access dashboards:
+#    Grafana: http://localhost:3000 (admin/admin)
+#    Prometheus: http://localhost:9090
+#    App metrics: http://localhost:8080/metrics
+#
+# 5. Stop everything:
+#    docker-compose --profile otel down
+#
+# ==============================================================================
