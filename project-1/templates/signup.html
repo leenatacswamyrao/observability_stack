@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title text-center">Create Account</h3>
+                <hr>
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert alert-info py-2">{{ message }}</div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+                <form action="/signup" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                        <small class="text-muted d-block mb-3">
+                            At least 8 characters, including A-Z, a-z, 0-9, and a special character (!@#$).
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                </form>
+                <div class="mt-3 text-center">
+                    <small>Already have an account? <a href="/login">Login here</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

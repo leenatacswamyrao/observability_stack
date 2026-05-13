@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm border text-center">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Observability & Chaos Lab</h1>
+            <p class="col-md-12 fs-4 text-muted">
+                A secure environment for testing application resilience, 
+                chaos engineering, and full-stack observability.
+            </p>
+            <hr class="my-4">
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                <a href="/login" class="btn btn-primary btn-lg px-4">Login</a>
+                <a href="/signup" class="btn btn-outline-secondary btn-lg px-4">Create Account</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="feature col text-center">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+                📊
+            </div>
+            <h3 class="fs-2">Stateful CRUD</h3>
+            <p>Built with Flask and SQLite to test data persistence across container restarts.</p>
+        </div>
+        <div class="feature col text-center">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+                🏗️
+            </div>
+            <h3 class="fs-2">Docker Ready</h3>
+            <p>Optimized for containerization and deployment via Harness CI/CD pipelines.</p>
+        </div>
+        <div class="feature col text-center">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+                🔥
+            </div>
+            <h3 class="fs-2">Chaos Tested</h3>
+            <p>Designed to be intentionally broken to observe system behavior and recovery.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
