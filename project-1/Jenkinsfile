@@ -33,11 +33,12 @@ pipeline {
         }
 
         stage('Build Image') {
-            steps {
-                echo "Building Docker Image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-            }
-        }
+    steps {
+        echo "Building Docker Image: chaos-app:v1"
+        // Notice the 'project-1/' added before Dockerfile
+        sh 'docker build -t chaos-app:v1 -f project-1/Dockerfile project-1/'
+    }
+}
 
         stage('Deploy to K8s') {
             steps {
