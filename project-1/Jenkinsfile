@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Scanning for Noisy Neighbors...'
                 // SRE Move: Run that validation we did earlier
-                sh 'kubectl apply --client --dry-run=client -f project-1/deployment.yaml'
+                sh 'kubectl apply --dry-run=client -f project-1/deployment.yaml'
             }
         }
 
