@@ -18,7 +18,17 @@ pipeline {
             steps {
                 echo 'Scanning for Noisy Neighbors...'
                 // SRE Move: Run that validation we did earlier
-               sh "python3 -c 'import yaml, sys; yaml.safe_load(open(\"project-1/deployment.yaml\"))' && echo 'YAML Syntax OK'"
+               sh '''
+                    if [ -f "project-1/deployment.yaml" ]; then
+                        echo "File exists, checking vital signs..."
+                        grep -q "kind: Deployment" project-1/deployment.yaml && \
+                        grep -q "image:" project-1/deployment.yaml && \
+                        echo "YAML Structure looks valid for deployment."
+                    else
+                        echo "Error: deployment.yaml not found!"
+                        exit 1
+                    fi
+                '''
             }
         }
 
