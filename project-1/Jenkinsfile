@@ -18,7 +18,8 @@ pipeline {
             steps {
                 echo 'Scanning for Noisy Neighbors...'
                 // SRE Move: Run that validation we did earlier
-               sh 'KUBECONFIG=/dev/null kubectl apply --dry-run=client --validate=false -f project-1/deployment.yaml'
+               //sh 'KUBECONFIG=/dev/null kubectl apply --dry-run=client --validate=false -f project-1/deployment.yaml'
+                sh 'kubectl apply --dry-run=client --validate=false --server=https://0.0.0.0:0 -f project-1/deployment.yaml'
             }
         }
 
