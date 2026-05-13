@@ -40,12 +40,12 @@ pipeline {
     }
 }
 
-        stage('Deploy to K8s') {
-            steps {
-                echo 'Deploying to Local Cluster...'
-                sh "kubectl apply -f deployment.yaml"
-                sh "kubectl rollout status deployment/chaos-app"
-            }
-        }
+       stage('Deploy to K8s') {
+    steps {
+        echo "Deploying to Local Cluster..."
+        // Point to project-1/deployment.yaml
+        sh 'kubectl apply -f project-1/deployment.yaml'
+    }
+}
     }
 }
