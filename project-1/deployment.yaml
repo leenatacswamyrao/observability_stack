@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: chaos-app
+  namespace: flask-project
 spec:
   replicas: 2
   selector:
@@ -15,6 +16,7 @@ spec:
       containers:
       - name: chaos-app
         image: chaos-app:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
         resources:
