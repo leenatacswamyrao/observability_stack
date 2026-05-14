@@ -18,3 +18,5 @@ EXPOSE 5000
 
 # Start the application
 CMD ["python", "app.py"]
+
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000"]
