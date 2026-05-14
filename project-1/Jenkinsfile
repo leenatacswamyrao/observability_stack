@@ -43,13 +43,16 @@ pipeline {
 stage('Deploy to K8s') {
     steps {
         echo "Deploying to Local Cluster..."
-        sh '''
-            kubectl apply -f project-1/deployment.yaml \
-            --server=https://host.docker.internal:54150 \
-            --token="${K8S_TOKEN}" \
-            --insecure-skip-tls-verify=true \
-            --validate=false
-        '''
+        // Ensure the credentialsId matches exactly what you named it in Jenkins
+        withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
+            sh """
+                kubectl apply -f project-1/deployment.yaml \
+                --server=https://host.docker.internal:54150 \
+                --token="${K8S_TOKEN}" \
+                --insecure-skip-tls-verify=true \
+                --validate=false
+            """
+        }
     }
 }
     }
