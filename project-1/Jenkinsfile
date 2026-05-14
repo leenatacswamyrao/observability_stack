@@ -43,7 +43,8 @@ pipeline {
 stage('Deploy to K8s') {
     steps {
         echo "Deploying to Local Cluster..."
-        sh 'kubectl apply -f project-1/deployment.yaml --validate=false'
+        // We point directly to the file we created in the last step
+        sh 'kubectl apply -f project-1/deployment.yaml --kubeconfig=/var/jenkins_home/.kube/config --validate=false'
     }
 }
     }
