@@ -37,7 +37,7 @@ pipeline {
         // This line fixes the permission 'on the fly' if needed
         sh 'sudo chmod 666 /var/run/docker.sock || true' 
         echo "Building Docker Image..."
-        sh 'docker build -t chaos-app:v1 -f project-1/Dockerfile project-1/'
+        sh 'docker build -t chaos-app:latest -f project-1/Dockerfile project-1/'
     }
 }
 stage('Deploy to K8s') {
