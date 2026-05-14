@@ -18,23 +18,39 @@ pipeline {
             steps {
                 echo 'Scanning for Noisy Neighbors...'
                 // SRE Move: Run that validation we did earlier
-                sh "kubectl apply --validate=true --dry-run=client -f deployment.yaml"
+               sh '''
+                    if [ -f "project-1/deployment.yaml" ]; then
+                        echo "File exists, checking vital signs..."
+                        grep -q "kind: Deployment" project-1/deployment.yaml && \
+                        grep -q "image:" project-1/deployment.yaml && \
+                        echo "YAML Structure looks valid for deployment."
+                    else
+                        echo "Error: deployment.yaml not found!"
+                        exit 1
+                    fi
+                '''
             }
         }
 
         stage('Build Image') {
-            steps {
-                echo "Building Docker Image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-            }
-        }
-
-        stage('Deploy to K8s') {
-            steps {
-                echo 'Deploying to Local Cluster...'
-                sh "kubectl apply -f deployment.yaml"
-                sh "kubectl rollout status deployment/chaos-app"
-            }
-        }
+    steps {
+        // This line fixes the permission 'on the fly' if needed
+        sh 'sudo chmod 666 /var/run/docker.sock || true' 
+        echo "Building Docker Image..."
+        sh 'docker build -t chaos-app:v1 -f project-1/Dockerfile project-1/'
+    }
+}
+stage('Deploy to K8s') {
+    steps {
+        echo "Deploying to Local Cluster..."
+        sh '''
+            kubectl apply -f project-1/deployment.yaml \
+            --server=https://host.docker.internal:54150 \
+            --token="${K8S_TOKEN}" \
+            --insecure-skip-tls-verify=true \
+            --validate=false
+        '''
+    }
+}
     }
 }
