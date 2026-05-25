@@ -39,7 +39,7 @@ pipeline {
         echo "Building Docker Image..."
        // sh 'docker build -t chaos-app:latest -f project-1/Dockerfile project-1/'
         // Tag the image with the specific Jenkins build number (v24, v25, etc.)
-        sh "docker build -t chaos-app:v${BUILD_NUMBER} project-1/"
+        sh "docker build --no-cache -t chaos-app:v${BUILD_NUMBER} project-1/"
     }
 }
 stage('Deploy to K8s') {
