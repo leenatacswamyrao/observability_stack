@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: chaos-app
-        image: chaos-app:v24
+        image: chaos-app:v25
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
