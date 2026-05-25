@@ -53,7 +53,7 @@ metadata:
   name: chaos-service
   namespace: flask-project
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 5000
       targetPort: 5000
