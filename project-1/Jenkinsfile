@@ -19,7 +19,7 @@ pipeline {
                 echo 'Scanning for Noisy Neighbors...'
                 // SRE Move: Run that validation we did earlier
                sh '''
-                    if [ -f "project-1/deployment.yaml" ]; then
+                    if [ -f "project-1/manifests/deployment.yaml" ]; then
                         echo "File exists, checking vital signs..."
                         grep -q "kind: Deployment" project-1/manifests/deployment.yaml && \
                         grep -q "image:" project-1/manifests/deployment.yaml && \
