@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
       - name: chaos-app
-        image: chaos-app:latest
+        # Harness will automatically swap this expression with the exact tag from Jenkins
+        image: chaos-app:<+artifact.tag> 
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
@@ -26,27 +27,27 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
-        livenessProbe:      # ← Moved 2 spaces to the right
+        livenessProbe:
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           periodSeconds: 10
-        readinessProbe:     # ← Moved 2 spaces to the right
+        readinessProbe:
           httpGet:
             path: /login
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: chaos-service
+  namespace: flask-project
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 30002
   selector:
     app: chaos-app

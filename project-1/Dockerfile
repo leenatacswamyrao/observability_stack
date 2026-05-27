@@ -16,5 +16,10 @@ COPY . .
 # Expose the port Flask uses
 EXPOSE 5000
 
+# Force Flask environment variables directly in the container
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=5000
+
 # Start the application
 CMD ["python", "app.py"]
