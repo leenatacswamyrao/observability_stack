@@ -21,8 +21,8 @@ pipeline {
                sh '''
                     if [ -f "project-1/deployment.yaml" ]; then
                         echo "File exists, checking vital signs..."
-                        grep -q "kind: Deployment" project-1/deployment.yaml && \
-                        grep -q "image:" project-1/deployment.yaml && \
+                        grep -q "kind: Deployment" project-1/manifests/deployment.yaml && \
+                        grep -q "image:" project-1/manifests/deployment.yaml && \
                         echo "YAML Structure looks valid for deployment."
                     else
                         echo "Error: deployment.yaml not found!"
@@ -48,7 +48,7 @@ stage('Deploy to K8s') {
         // Ensure the credentialsId matches exactly what you named it in Jenkins
         withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
             sh """
-                kubectl apply -f project-1/deployment.yaml \
+                kubectl apply -f project-1/manifests/deployment.yaml \
                 --server=https://host.docker.internal:54150 \
                 --token="${K8S_TOKEN}" \
                 --insecure-skip-tls-verify=true \
