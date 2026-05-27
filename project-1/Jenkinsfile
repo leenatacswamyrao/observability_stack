@@ -1,5 +1,11 @@
 pipeline {
     agent any
+    environment {
+        // Tells Docker to use the Windows network port instead of a socket
+        DOCKER_HOST = 'tcp://localhost:2375'
+        // Disables TLS compliance since our local port runs without it
+        DOCKER_TLS_VERIFY = '0'
+    }
 
     environment {
         DOCKER_IMAGE = "chaos-app"
