@@ -15,21 +15,11 @@ spec:
     spec:
       containers:
       - name: chaos-app
-        image: chaos-app:latest
+        # In Harness, you will replace this with: chaos-app:<+artifact.tag>
+        image: chaos-app:latest 
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
-        command: ["flask"]
-        args: ["run", "--host=0.0.0.0", "--port=5000"]
-        env:
-        #- name: FLASK_RUN_HOST
-         # value: "0.0.0.0"
-        #- name: FLASK_RUN_PORT
-         # value: "5000"
-        - name: FLASK_APP
-          value: "app.py"
-        - name: FLASK_ENV
-          value: "development"
         resources:
           requests:
             memory: "64Mi"
@@ -37,28 +27,27 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
-        livenessProbe:      # ← Moved 2 spaces to the right
+        livenessProbe:
           httpGet:
             path: /
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           periodSeconds: 10
-        readinessProbe:     # ← Moved 2 spaces to the right
+        readinessProbe:
           httpGet:
             path: /login
             port: 5000
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: chaos-service
-  namespace: flask-project
+  namespace: flask-project  # Explicitly added to match the deployment namespace
 spec:
-  type: LoadBalancer
+  type: LoadBalancer        # Switched from NodePort for standard pipeline stability
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 30002
   selector:
     app: chaos-app
