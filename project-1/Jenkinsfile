@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         // 1. Windows Docker Desktop Fixes
-        DOCKER_HOST = 'tcp://localhost:2375'
+        DOCKER_HOST = 'tcp://host.docker.internal:2375'
         DOCKER_TLS_VERIFY = ''
         
         // 2. App Image Variables
