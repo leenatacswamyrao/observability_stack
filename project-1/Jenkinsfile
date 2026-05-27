@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    
     environment {
         // Tells Docker to use the Windows network port instead of a socket
         DOCKER_HOST = 'tcp://localhost:2375'
