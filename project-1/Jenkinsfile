@@ -57,5 +57,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Playwright Tests') {
+            steps {
+        // Pull the fresh test suite code
+                checkout scm
+        // Install dependencies and run tests natively on the Jenkins agent
+                sh 'npm install'
+                sh 'npx playwright test'
+            }
+        }
     }
 }
