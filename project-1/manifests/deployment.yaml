@@ -16,7 +16,7 @@ spec:
       containers:
       - name: chaos-app
         # Harness will automatically swap this expression with the exact tag from Jenkins
-        image: chaos-app:<+pipeline.variables.JENKINS_BUILD_TAG> 
+        image: chaos-app:<+artifact.tag>
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
