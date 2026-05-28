@@ -16,7 +16,7 @@ spec:
       containers:
       - name: chaos-app
         # Harness will automatically swap this expression with the exact tag from Jenkins
-        image: chaos-app:{{ .Values.imageTag }}
+        image: chaos-app:<+env.variables.imageTag>
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
