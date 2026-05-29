@@ -58,29 +58,17 @@ pipeline {
         }
 
         stage('Run Playwright Tests') {
-    agent {
-        docker {
-            image 'mcr.microsoft.com/playwright:v1.40.0-focal'
-            // Reuses your existing Jenkins workspace files inside the container
-            reuseNode true 
-        }
-    }
-    steps {
-        echo 'Running Playwright natively inside official Playwright container...'
+            steps {
+                    echo 'Launching Playwright container via shell...'
         sh '''
-            # 1. Move directly to your project test directory
-            cd project-1/chaos-app/
-            
-            # 2. Clean up any leftover node artifacts from previous host attempts
-            rm -rf node_modules package-lock.json bin
-            
-            # 3. Node & NPM are already pre-installed here! Just install your dependencies
-            npm install
-            
-            # 4. Run your tests against the local network endpoint
-            page_url="http://host.docker.internal:5000" npx playwright test
+            # Run the official playwright image, mount the current workspace, and execute the tests
+            docker run --rm \
+              -v "$(pwd):/work" \
+              -w /work/project-1/chaos-app \
+              mcr.microsoft.com/playwright:v1.40.0-focal \
+              /bin/sh -c "npm install && page_url='http://host.docker.internal:5000' npx playwright test"
         '''
-    }
-}
+                }
+            }
     }
 }
