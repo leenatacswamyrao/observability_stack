@@ -61,12 +61,14 @@ pipeline {
             steps {
                     echo 'Launching Playwright container via shell...'
         sh '''
-            # Run the official playwright image, mount the current workspace, and execute the tests
-            docker run --rm \
-              -v "$WORKSPACE:/work" \
-              -w /work/project-1/chaos-app \
-              mcr.microsoft.com/playwright:v1.40.0-focal \
-              /bin/sh -c "npm install && page_url='http://host.docker.internal:5000' npx playwright test"
+            cd project-1/chaos-app/
+            curl -fsSL https://nodejs.org/dist/v20.11.1/node-v20.11.1-linux-x64.tar.gz -o node.tar.gz
+            tar -xzf node.tar.gz --strip-components=1
+            rm -f node.tar.gz
+            export PATH="$(pwd)/bin:$PATH"
+            npm install
+            npx playwright install chromium
+            PLAYWRIGHT_CHROMIUM_CHANNEL=chromium-headless-shell page_url="http://localhost:5000" npx playwright test
         '''
                 }
             }
