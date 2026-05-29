@@ -71,5 +71,22 @@ pipeline {
         '''
                 }
             }
+        post {
+        always {
+            echo 'Pipeline completed. Cleaning up workspace...'
+        }
+        failure {
+            mail to: 'leenatacswamyrao@gmail.com',
+                 subject: "❌ Playwright Test Failure: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
+                 body: """The Playwright test suite or deployment stage just failed on your branch.
+                          
+                    Check the live Jenkins console logs here to debug: ${env.BUILD_URL}console
+                          
+                    Time of Failure: ${currentBuild.startTimeProvider()}"""
+        }
+        success {
+            echo 'Build passed flawlessly. No email spam needed!'
+        }
+    }
     }
 }
