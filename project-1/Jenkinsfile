@@ -81,7 +81,7 @@ pipeline {
                         npm install
             
                         # 7. Install the browser binaries required by Playwright
-                        npx playwright install --with-deps chromium
+                        npx playwright install chromium
             
                         # 8. Execute your test suite against the local cluster application port
                         page_url="http://localhost:5000" npx playwright test
