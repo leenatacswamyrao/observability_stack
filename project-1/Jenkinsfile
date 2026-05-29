@@ -67,8 +67,7 @@ pipeline {
             rm -f node.tar.gz
             export PATH="$(pwd)/bin:$PATH"
             npm install
-            npx playwright install chromium
-            PLAYWRIGHT_CHROMIUM_CHANNEL=chromium-headless-shell page_url="http://localhost:5000" npx playwright test
+            page_url="http://localhost:5000" npx playwright test
         '''
                 }
             }
