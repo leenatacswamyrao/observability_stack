@@ -1,0 +1,12 @@
+{
+  "name": "chaos-app-automation",
+  "version": "1.0.0",
+  "description": "Playwright end-to-end and data seeding suites for Chaos App",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}
