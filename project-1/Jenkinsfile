@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    tools {
+        // Tells Jenkins to automatically provision Node.js for this job
+        nodejs 'node' 
+        }
     
     environment {
         // 1. Windows Docker Desktop Fixes
@@ -9,7 +13,7 @@ pipeline {
         // 2. App Image Variables
         DOCKER_IMAGE = "chaos-app"
         DOCKER_TAG = "v${env.BUILD_NUMBER}" 
-    }
+        }
 
     stages {
         stage('Checkout') {
@@ -56,11 +60,6 @@ pipeline {
                     """
                 }
             }
-        }
-
-        tools {
-        // Tells Jenkins to automatically provision Node.js for this job
-        nodejs 'node' 
         }
 
         stage('Run Playwright Tests') {
