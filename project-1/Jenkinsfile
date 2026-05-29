@@ -57,24 +57,36 @@ pipeline {
             }
         }
 
-     stage('Run Playwright Tests') {
-    steps {
-        echo 'Checking current workspace directory structure...'
-        sh '''
-            # 1. Print the current directory we are standing in
-            pwd
+         stage('Run Playwright Tests') {
+            steps {
+                echo 'Navigating to Git test folder and running Playwright...'
+                    sh '''
+                        # 1. Clean up old compressed artifacts from the root directory to save space
+                        rm -f node.tar.gz node.tar.xz package-lock.json
             
-            # 2. List everything in the root workspace
-            echo "--- Root Workspace Content ---"
-            ls -la
+                        # 2. Step into your pushed Git repository path
+                        cd project-1/chaos-app/
             
-            # 3. List inside the observability stack folder if it exists
-            if [ -d "observability_stack" ]; then
-                echo "--- Inside observability_stack ---"
-                ls -la observability_stack
-            fi
-        '''
-    }
-}
+                        # 3. Download and extract Node.js locally inside this specific folder
+                        curl -fsSL https://nodejs.org/dist/v20.11.1/node-v20.11.1-linux-x64.tar.gz -o node.tar.gz
+                        tar -xzf node.tar.gz --strip-components=1
+            
+                        # 4. Add the extracted binaries to the temporary execution PATH
+                        export PATH="$(pwd)/bin:$PATH"
+            
+                        # 5. Clear out node binary zip inside this folder to stay pristine
+                        rm -f node.tar.gz
+            
+                        # 6. Install the dependencies listed in your pushed package.json
+                        npm install
+            
+                        # 7. Install the browser binaries required by Playwright
+                        npx playwright install --with-deps chromium
+            
+                        # 8. Execute your test suite against the local cluster application port
+                        page_url="http://localhost:5000" npx playwright test
+                    '''
+                }
+            }
     }
 }
