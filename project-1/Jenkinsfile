@@ -67,7 +67,7 @@ pipeline {
             rm -f node.tar.gz
             export PATH="$(pwd)/bin:$PATH"
             npm install
-            page_url="http://localhost:5000" npx playwright test
+            page_url="http://host.docker.internal:5000" npx playwright test
         '''
                 }
             }
