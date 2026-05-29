@@ -63,7 +63,7 @@ pipeline {
         sh '''
             # Run the official playwright image, mount the current workspace, and execute the tests
             docker run --rm \
-              -v "$(pwd):/work" \
+              -v "$WORKSPACE:/work" \
               -w /work/project-1/chaos-app \
               mcr.microsoft.com/playwright:v1.40.0-focal \
               /bin/sh -c "npm install && page_url='http://host.docker.internal:5000' npx playwright test"
