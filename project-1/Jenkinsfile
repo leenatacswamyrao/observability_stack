@@ -1,11 +1,6 @@
 pipeline {
     agent any
-    tools {
-        // Tells Jenkins to automatically provision Node.js for this job
-        nodejs 'node' 
-        }
-    
-    environment {
+        environment {
         // 1. Windows Docker Desktop Fixes
         DOCKER_HOST = 'tcp://host.docker.internal:2375'
         DOCKER_TLS_VERIFY = ''
@@ -62,13 +57,25 @@ pipeline {
             }
         }
 
-        stage('Run Playwright Tests') {
+      stage('Run Playwright Tests') {
             steps {
-        // Pull the fresh test suite code
-                checkout scm
-        // Install dependencies and run tests natively on the Jenkins agent
-                sh 'npm install'
-                sh 'npx playwright test'
+                    echo 'Installing Node and running Playwright...'
+                    sh '''
+                     # 1. Download and extract a portable Node.js binary
+                    curl -fsSL https://nodejs.org/dist/v20.11.1/node-v20.11.1-linux-x64.tar.xz -o node.tar.xz
+                    tar -xf node.tar.xz --strip-components=1
+            
+                    # 2. Add the freshly extracted binaries to our temporary execution PATH
+                    export PATH="$(pwd)/bin:$PATH"
+            
+                    # 3. Verify it works!
+                    node -v
+                    npm -v
+            
+                    # 4. Execute your automation suite
+                    npm install
+                    npx playwright test
+                '''
             }
         }
     }
