@@ -58,6 +58,11 @@ pipeline {
             }
         }
 
+        tools {
+        // Tells Jenkins to automatically provision Node.js for this job
+        nodejs 'node' 
+        }
+
         stage('Run Playwright Tests') {
             steps {
         // Pull the fresh test suite code
