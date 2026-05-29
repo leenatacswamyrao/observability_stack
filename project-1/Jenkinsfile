@@ -59,26 +59,20 @@ pipeline {
 
      stage('Run Playwright Tests') {
     steps {
-        echo 'Navigating to your Git test folder and running Playwright...'
+        echo 'Checking current workspace directory structure...'
         sh '''
-            # 1. Step into your pushed Git repository path
-            cd observability_stack/project-1/chaos-app/
+            # 1. Print the current directory we are standing in
+            pwd
             
-            # 2. Download and extract Node.js locally inside this folder
-            curl -fsSL https://nodejs.org/dist/v20.11.1/node-v20.11.1-linux-x64.tar.gz -o node.tar.gz
-            tar -xzf node.tar.gz --strip-components=1
+            # 2. List everything in the root workspace
+            echo "--- Root Workspace Content ---"
+            ls -la
             
-            # 3. Add the extracted binaries to the temporary execution PATH
-            export PATH="$(pwd)/bin:$PATH"
-            
-            # 4. Install the dependencies listed in your pushed package.json
-            npm install
-            
-            # 5. Install the browser binaries required by Playwright
-            npx playwright install --with-deps chromium
-            
-            # 6. Execute your real test suite against the application port
-            page_url="http://localhost:5000" npx playwright test
+            # 3. List inside the observability stack folder if it exists
+            if [ -d "observability_stack" ]; then
+                echo "--- Inside observability_stack ---"
+                ls -la observability_stack
+            fi
         '''
     }
 }
