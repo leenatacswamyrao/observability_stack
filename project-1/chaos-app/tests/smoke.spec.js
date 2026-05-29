@@ -1,10 +1,14 @@
 const { test, expect } = require('@playwright/test');
 
-test('Application Health Check', async ({ page }) => {
-  // Pulls the baseURL dynamically from our config file
-  await page.goto('/');
+// Change { page } to { request } to use native API fetching
+test('Application Health Check', async ({ request }) => {
   
-  // Asserts that the page loaded successfully
-  await expect(page).toHaveTitle(/.*|.*/); 
-  console.log('App is up and responding beautifully!');
+  // This executes a direct HTTP GET request using your config's baseURL
+  const response = await request.get('/');
+  
+  // Log the output directly to your Jenkins console
+  console.log(`Status Received: ${response.status()}`);
+  
+  // Verify the status code is a clean 200 OK
+  expect(response.status()).toBe(200);
 });
