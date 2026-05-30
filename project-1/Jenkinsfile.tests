@@ -35,51 +35,48 @@ pipeline {
 
     stage('Bridge & Run CRUD Tests') {
             steps {
-                echo 'Establishing network bridge and checking endpoint health...'
-                sh '''
-                    # 1. Clear any zombie port-forwards
-                    pkill -f "port-forward" || true
-                    
-                    # 2. Start background port forwarding to the service
-                    echo "Opening port-forward tunnel..."
-                    kubectl port-forward svc/${K8S_SERVICE} 5000:5000 -n flask-project > /dev/null 2>&1 &
-                    
-                    # 🛑 THE FIX: Give the background process 2 seconds to bind to local port 5000
-                    echo "Waiting for local port binding..."
-                    sleep 2
-                    
-                    # 3. Network Polling Gate: Wait up to 2 minutes for the endpoint to respond
-                    echo "Polling http://localhost:5000 for a valid response..."
-                    ATTEMPTS=0
-                    MAX_ATTEMPTS=24 # 24 attempts * 5 seconds = 2 minutes
-                    MATCH_FOUND=false
-
-                    while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
-                        if curl -s -o /dev/null http://localhost:5000; then
-                            echo "✅ Application is live and responding! Proceeding to tests..."
-                            MATCH_FOUND=true
-                            break
+                echo 'Validating pod string status before running tests...'
+                
+                // 🔐 Grab the token from your Jenkins credentials store
+                withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
+                    sh '''
+                        # 1. Clear any old port-forwards
+                        pkill -f "port-forward" || true
+                        
+                        # 2. Extract the status columns and check for your exact string match
+                        echo "Checking for '1/1 Running' signature..."
+                        POD_STATUS=$(kubectl get pods -l app=chaos-app -n flask-project --no-headers \
+                                      --server=https://host.docker.internal:54150 \
+                                      --token="${K8S_TOKEN}" \
+                                      --insecure-skip-tls-verify=true \
+                                      | awk '{print $2 " " $3}' | grep "1/1 Running" || true)
+                        
+                        if [ -z "$POD_STATUS" ]; then
+                            echo "❌ Error: Pods are not reporting '1/1 Running'. Skipping tests."
+                            exit 1
                         fi
                         
-                        echo "Endpoint not reachable yet... waiting 5 seconds (Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS)"
-                        sleep 5
-                        ATTEMPTS=$((ATTEMPTS+1))
-                    done
-
-                    if [ "$MATCH_FOUND" = false ]; then
-                        echo "❌ Error: Application endpoint failed to respond within timeout."
-                        exit 1
-                    fi
-                    
-                    # 4. Execute the Playwright tests
-                    cd project-1/chaos-app/
-                    export PATH="$(pwd)/bin:$PATH"
-                    page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
-                '''
+                        echo "✅ String match successful: ($POD_STATUS). Starting network bridge..."
+                        
+                        # 3. Securely open the port-forward tunnel using the authenticated token
+                        kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project \
+                                --server=https://host.docker.internal:54150 \
+                                --token="${K8S_TOKEN}" \
+                                --insecure-skip-tls-verify=true > /dev/null 2>&1 &
+                        
+                        # Give the background bridge a moment to latch
+                        sleep 3
+                        
+                        # 4. Release Playwright tests
+                        cd project-1/chaos-app/
+                        export PATH="$(pwd)/bin:$PATH"
+                        page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
+                    '''
+                }
             }
             post {
                 always {
-                    echo 'Tearing down port-forward session...'
+                    echo 'Cleaning up network bridge...'
                     sh 'pkill -f "port-forward" || true'
                 }
             }
