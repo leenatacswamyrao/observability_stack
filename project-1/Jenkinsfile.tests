@@ -40,32 +40,17 @@ stage('Bridge & Run CRUD Tests') {
                     # 1. Clear any zombie port-forwards
                     pkill -f "port-forward" || true
                     
-                    # 2. Inspect Kubernetes using direct JSONPath formatting
-                    echo "Checking for a live, running application pod..."
-                    ATTEMPTS=0
-                    MAX_ATTEMPTS=60 # Up to 5 minutes
-                    MATCH_FOUND=false
-
-                    while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
-                        # Direct lookup: Returns "true" if the container status is ready
-                        STATUS_CHECK=$(kubectl get pods -l app=chaos-app -n flask-project -o jsonpath='{.items[*].status.containerStatuses[*].ready}' 2>/dev/null)
-                        
-                        if [ "$STATUS_CHECK" = "true" ]; then
-                            echo "✅ Found a healthy, running pod! Proceeding..."
-                            MATCH_FOUND=true
-                            break
-                        fi
-                        
-                        echo "Pod is not ready yet... waiting 5 seconds (Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS)"
-                        sleep 5
-                        ATTEMPTS=$((ATTEMPTS+1))
-                    done
-
-                    if [ "$MATCH_FOUND" = false ]; then
-                        echo "❌ Error: Pod failed to reach a Ready state within the time limit."
+                    # 2. Let Kubernetes natively block until the pod is 100% Ready
+                    echo "Waiting for chaos-app pod to reach Ready condition..."
+                    if kubectl wait --namespace=flask-project \
+                                  --for=condition=Ready \
+                                  pod -l app=chaos-app \
+                                  --timeout=60s; then
+                        echo "✅ Pod is fully ready and accepting traffic!"
+                    else
+                        echo "❌ Error: Pod did not reach ready state within timeout."
                         exit 1
-                    fi
-                    
+                    fi                    
                     # 3. Start background port forwarding now that we know a ready pod exists
                     echo "Opening port-forward tunnel to ${K8S_SERVICE}..."
                     kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
