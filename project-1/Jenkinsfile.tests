@@ -34,14 +34,11 @@ pipeline {
         }
     stage('Bridge & Run CRUD Tests') {
             steps {
-                echo 'Validating pod string status before running tests...'
+                echo 'Validating pod status and launching Playwright test suite...'
                 
                 withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
                     sh '''
-                        # 1. Clear any old port-forwards
-                        pkill -f "port-forward" || true
-                        
-                        # 2. Extract the status columns and check for your exact string match
+                        # 1. Verify the pods are healthy before running tests
                         echo "Checking for '1/1 Running' signature..."
                         POD_STATUS=$(kubectl get pods -l app=chaos-app -n flask-project --no-headers \
                                       --server=https://host.docker.internal:54150 \
@@ -54,29 +51,15 @@ pipeline {
                             exit 1
                         fi
                         
-                        echo "✅ String match successful: ($POD_STATUS). Starting network bridge..."
+                        echo "✅ Cluster health verified: ($POD_STATUS)."
                         
-                        # 3. 🛑 THE FIX: Force the port-forward to bind to BOTH IPv4 (0.0.0.0) and IPv6 (::)
-                        kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project \
-                                --address=0.0.0.0,:: \
-                                --server=https://host.docker.internal:54150 \
-                                --token="${K8S_TOKEN}" \
-                                --insecure-skip-tls-verify=true > /dev/null 2>&1 &
-                        
-                        # Give the background bridge a moment to latch
-                        sleep 3
-                        
-                        # 4. Release Playwright tests using your host configuration routing
+                        # 2. 🛑 NO MORE PORT-FORWARD HOOPS: Run Playwright directly against your host routing
                         cd project-1/chaos-app/
                         export PATH="$(pwd)/bin:$PATH"
-                        page_url="http://172.17.0.1:5000" npx playwright test tests/crud.spec.js
+                        
+                        echo "Launching tests against application endpoint..."
+                        page_url="http://localhost:5000" npx playwright test tests/crud.spec.js
                     '''
-                }
-            }
-            post {
-                always {
-                    echo 'Cleaning up network bridge...'
-                    sh 'pkill -f "port-forward" || true'
                 }
             }
         }
