@@ -60,6 +60,7 @@ pipeline {
                         
                         # 3. Securely open the port-forward tunnel using the authenticated token
                         kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project \
+                                --address=0.0.0.0 \
                                 --server=https://host.docker.internal:54150 \
                                 --token="${K8S_TOKEN}" \
                                 --insecure-skip-tls-verify=true > /dev/null 2>&1 &
@@ -70,7 +71,7 @@ pipeline {
                         # 4. Release Playwright tests
                         cd project-1/chaos-app/
                         export PATH="$(pwd)/bin:$PATH"
-                        page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
+                        page_url="http://localhost:5000" npx playwright test tests/crud.spec.js
                     '''
                 }
             }
