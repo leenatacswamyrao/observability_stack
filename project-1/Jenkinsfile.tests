@@ -56,11 +56,10 @@ pipeline {
                         
                         echo "✅ Cluster health verified: ($POD_STATUS)."
                         
-                        # 3. 🛑 THE FIX: Force the port-forward to explicitly bind to the loopback name 'localhost'
-                        # This forces kubectl to register the port on BOTH 127.0.0.1 and ::1 inside the OS routing table
-                        echo "Starting network bridge on localhost adapter..."
+                        # 3. Open the port-forward tunnel globally on IPv4
+                        echo "Starting network bridge..."
                         kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project \
-                                --address=localhost \
+                                --address=0.0.0.0 \
                                 --server=https://host.docker.internal:54150 \
                                 --token="${K8S_TOKEN}" \
                                 --insecure-skip-tls-verify=true > /dev/null 2>&1 &
@@ -68,12 +67,12 @@ pipeline {
                         # Give the background bridge 3 seconds to latch
                         sleep 3
                         
-                        # 4. Run Playwright against the local loopback interface
+                        # 4. 🛑 THE FIX: Use the standard Docker IPv4 bridge gateway
                         cd project-1/chaos-app/
                         export PATH="$(pwd)/bin:$PATH"
                         
                         echo "Launching tests against application endpoint..."
-                        page_url="http://localhost:5000" npx playwright test tests/crud.spec.js
+                        page_url="http://172.17.0.1:5000" npx playwright test tests/crud.spec.js
                     '''
                 }
             }
