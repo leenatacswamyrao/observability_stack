@@ -33,17 +33,20 @@ pipeline {
             }
         }
 
-stage('Bridge & Run CRUD Tests') {
+    stage('Bridge & Run CRUD Tests') {
             steps {
                 echo 'Establishing network bridge and checking endpoint health...'
                 sh '''
                     # 1. Clear any zombie port-forwards
                     pkill -f "port-forward" || true
                     
-                    # 2. Start background port forwarding to the service 
-                    # (Note: If this throws an auth error in your environment, we will wrap it in credentials next)
+                    # 2. Start background port forwarding to the service
                     echo "Opening port-forward tunnel..."
                     kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
+                    
+                    # 🛑 THE FIX: Give the background process 2 seconds to bind to local port 5000
+                    echo "Waiting for local port binding..."
+                    sleep 2
                     
                     # 3. Network Polling Gate: Wait up to 2 minutes for the endpoint to respond
                     echo "Polling http://localhost:5000 for a valid response..."
