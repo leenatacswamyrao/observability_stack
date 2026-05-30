@@ -69,7 +69,7 @@ pipeline {
                         # 4. Release Playwright tests using your host configuration routing
                         cd project-1/chaos-app/
                         export PATH="$(pwd)/bin:$PATH"
-                        page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
+                        page_url="http://172.17.0.1:5000" npx playwright test tests/crud.spec.js
                     '''
                 }
             }
