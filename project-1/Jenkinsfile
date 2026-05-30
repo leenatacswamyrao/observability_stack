@@ -1,6 +1,7 @@
 pipeline {
     agent any
-        environment {
+    
+    environment {
         // 1. Windows Docker Desktop Fixes
         DOCKER_HOST = 'tcp://host.docker.internal:2375'
         DOCKER_TLS_VERIFY = ''
@@ -8,12 +9,14 @@ pipeline {
         // 2. App Image Variables
         DOCKER_IMAGE = "chaos-app"
         DOCKER_TAG = "v${env.BUILD_NUMBER}" 
-        }
+    }
 
     stages {
         stage('Checkout') {
             steps {
                 echo 'Pulling code from Git...'
+                // Restoring your core Git source checkout step
+                git branch: 'main', url: 'https://github.com/leenatacswamyrao/observability_stack.git'
             }
         }
 
@@ -37,7 +40,6 @@ pipeline {
         stage('Build Image') {
             steps {
                 echo "Building Docker Image..."
-                // Using the dynamic DOCKER_TAG variable defined above
                 sh "docker build --no-cache -t ${DOCKER_IMAGE}:${DOCKER_TAG} project-1/"
             }
         }
@@ -57,46 +59,29 @@ pipeline {
             }
         }
 
-<<<<<<< Updated upstream
-        stage('Run Playwright Tests') {
+        stage('Trigger Integration Tests') {
             steps {
-                    echo 'Launching Playwright container via shell...'
-        sh '''
-            cd project-1/chaos-app/
-            curl -fsSL https://nodejs.org/dist/v20.11.1/node-v20.11.1-linux-x64.tar.gz -o node.tar.gz
-            tar -xzf node.tar.gz --strip-components=1
-            rm -f node.tar.gz
-            export PATH="$(pwd)/bin:$PATH"
-            npm install
-            page_url="http://host.docker.internal:5000" npx playwright test
-        '''
-                }
+                echo 'Harness/Local deployment step completed. Handoff to test pipeline...'
+                // Triggers your brand-new independent testing pipeline and keeps moving
+                build job: 'chaos-app-crud-tests', wait: false 
             }
-        post {
+        }
+    }
+
+    post {
         always {
             echo 'Pipeline completed. Cleaning up workspace...'
         }
         failure {
+            // Your email alerts remain active if the build/deploy breaks before the test phase!
             mail to: 'leenatacswamyrao@gmail.com',
-                 subject: "❌ Playwright Test Failure: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
-                 body: """The Playwright test suite or deployment stage just failed on your branch.
+                 subject: "❌ Deployment Failure: Job '${env.JOB_NAME}' [Build #${env.BUILD_NUMBER}]",
+                 body: """The main application deployment stage just failed on your branch.
                           
-                    Check the live Jenkins console logs here to debug: ${env.BUILD_URL}console
-                          
-                    Time of Failure: ${currentBuild.startTimeProvider()}"""
+Check the live Jenkins console logs here to debug: ${env.BUILD_URL}console"""
         }
         success {
-            echo 'Build passed flawlessly. No email spam needed!'
+            echo 'Deployment successfully handed off to integration test suite!'
         }
-    }
-=======
-     stage('Trigger Integration Tests') {
-    steps {
-        echo 'Triggering the independent CRUD test pipeline downstream...'
-        // Triggers your new job asynchronously and keeps moving
-        build job: 'chaos-app-crud-tests', wait: false 
-    }
-}
->>>>>>> Stashed changes
     }
 }
