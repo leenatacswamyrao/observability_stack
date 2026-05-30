@@ -33,27 +33,30 @@ pipeline {
             }
         }
 
-        stage('Bridge & Run CRUD Tests') {
+    stage('Bridge & Run CRUD Tests') {
             steps {
                 echo 'Spanning network tunnel and running Playwright CRUD suite...'
                 sh '''
-                    # 1. Clear any zombie port-forwards
+                    # 1. Force Jenkins to wait until the deployment is fully rolled out and ready
+                    echo "Checking Kubernetes deployment stability..."
+                    kubectl rollout status deployment/chaos-app-deployment --timeout=90s
+                    
+                    # 2. Clear any zombie port-forwards
                     pkill -f "port-forward" || true
                     
-                    # 2. Start background port forwarding
+                    # 3. Start background port forwarding
                     echo "Opening port-forward tunnel to ${K8S_SERVICE}..."
                     kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
                     
-                    # 3. Hold for 5 seconds to let the network pipe settle
-                    sleep 5
+                    # 4. Give the background tunnel 3 seconds to bind to the port
+                    sleep 3
                     
-                    # 4. Execute the tests
+                    # 5. Execute the tests
                     cd project-1/chaos-app/
                     export PATH="$(pwd)/bin:$PATH"
                     page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
                 '''
             }
-            // Ensure the port forward is ALWAYS torn down, even if tests fail!
             post {
                 always {
                     echo 'Tearing down port-forward session...'
