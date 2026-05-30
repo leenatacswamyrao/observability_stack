@@ -54,14 +54,6 @@ pipeline {
                         --token="${K8S_TOKEN}" \
                         --insecure-skip-tls-verify=true \
                         --validate=false
-
-                    # 🛑 THE FIX: Pause the pipeline until the new pods are 100% ready and running
-                        echo "Waiting for pods to stabilize..."
-                        kubectl rollout status deployment/chaos-app-deployment \
-                        --server=https://host.docker.internal:54150 \
-                        --token="${K8S_TOKEN}" \
-                        --insecure-skip-tls-verify=true \
-                        --timeout=120s
                     """
                 }
             }
