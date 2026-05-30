@@ -33,36 +33,48 @@ pipeline {
             }
         }
 
-stage('Bridge & Run CRUD Tests') {
+    stage('Bridge & Run CRUD Tests') {
             steps {
-                echo 'Spanning network tunnel and waiting for application readiness...'
+                echo 'Validating pod readiness and preparing network bridge...'
                 sh '''
                     # 1. Clear any zombie port-forwards
                     pkill -f "port-forward" || true
                     
-                    # 2. Start background port forwarding to the service
-                    echo "Opening port-forward tunnel to ${K8S_SERVICE}..."
-                    kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
-                    
-                    # 3. Smart Network Gate: Wait until curl can reach the endpoint cleanly
-                    echo "Polling application endpoint for readiness..."
+                    # 2. Inspect Kubernetes for a 1/1 READY pod matching your app label
+                    echo "Checking for a live, running application pod..."
                     ATTEMPTS=0
-                    MAX_ATTEMPTS=12
-                    
-                    until curl -s -o /dev/null http://localhost:5000 || [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; do
-                        echo "Application warming up... waiting 5 seconds (Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS)"
+                    MAX_ATTEMPTS=60 # Up to 5 minutes
+                    MATCH_FOUND=false
+
+                    while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
+                        # Check if any pod labeled 'app=chaos-app' has reached '1/1' READY and 'Running' STATUS
+                        # Adjust app=chaos-app to match the exact label in your deployment.yaml
+                        STATUS_CHECK=$(kubectl get pods -l app=chaos-app -n flask-project --no-headers 2>/dev/null | awk '{print $2 " " $3}' | grep -E "1/1 Running" || true)
+                        
+                        if [ ! -z "$STATUS_CHECK" ]; then
+                            echo "✅ Found a healthy, running pod matching criteria: $STATUS_CHECK"
+                            MATCH_FOUND=true
+                            break
+                        fi
+                        
+                        echo "Pod is not ready yet... waiting 5 seconds (Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS)"
                         sleep 5
                         ATTEMPTS=$((ATTEMPTS+1))
                     done
 
-                    if [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; then
-                        echo "❌ Error: Application failed to initialize within time limit."
+                    if [ "$MATCH_FOUND" = false ]; then
+                        echo "❌ Error: Pod failed to reach 1/1 Running state within the time limit."
                         exit 1
                     fi
-
-                    echo "✅ Application is live! Running Playwright CRUD suite..."
                     
-                    # 4. Execute the tests
+                    # 3. Start background port forwarding now that we know a ready pod exists
+                    echo "Opening port-forward tunnel to ${K8S_SERVICE}..."
+                    kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
+                    
+                    # 4. Brief pause for the network tunnel to bind locally
+                    sleep 3
+                    
+                    # 5. Execute the tests
                     cd project-1/chaos-app/
                     export PATH="$(pwd)/bin:$PATH"
                     page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
