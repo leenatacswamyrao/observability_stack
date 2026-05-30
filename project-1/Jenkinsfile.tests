@@ -56,10 +56,11 @@ pipeline {
                         
                         echo "✅ Cluster health verified: ($POD_STATUS)."
                         
-                        # 3. Open the port-forward tunnel on BOTH IPv4 (0.0.0.0) and IPv6 (::) adapters
-                        echo "Starting dual-stack network bridge..."
+                        # 3. 🛑 THE FIX: Force the port-forward to explicitly bind to the loopback name 'localhost'
+                        # This forces kubectl to register the port on BOTH 127.0.0.1 and ::1 inside the OS routing table
+                        echo "Starting network bridge on localhost adapter..."
                         kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project \
-                                --address=0.0.0.0,:: \
+                                --address=localhost \
                                 --server=https://host.docker.internal:54150 \
                                 --token="${K8S_TOKEN}" \
                                 --insecure-skip-tls-verify=true > /dev/null 2>&1 &
@@ -72,7 +73,7 @@ pipeline {
                         export PATH="$(pwd)/bin:$PATH"
                         
                         echo "Launching tests against application endpoint..."
-                        NODE_OPTIONS="--dns-result-order=ipv4first" page_url="http://localhost:5000" npx playwright test tests/crud.spec.js
+                        page_url="http://localhost:5000" npx playwright test tests/crud.spec.js
                     '''
                 }
             }
