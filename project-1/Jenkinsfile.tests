@@ -33,26 +33,25 @@ pipeline {
             }
         }
 
-    stage('Bridge & Run CRUD Tests') {
+stage('Bridge & Run CRUD Tests') {
             steps {
-                echo 'Validating pod readiness and preparing network bridge...'
+                echo 'Validating pod readiness using JSONPath and preparing network bridge...'
                 sh '''
                     # 1. Clear any zombie port-forwards
                     pkill -f "port-forward" || true
                     
-                    # 2. Inspect Kubernetes for a 1/1 READY pod matching your app label
+                    # 2. Inspect Kubernetes using direct JSONPath formatting
                     echo "Checking for a live, running application pod..."
                     ATTEMPTS=0
                     MAX_ATTEMPTS=60 # Up to 5 minutes
                     MATCH_FOUND=false
 
                     while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
-                        # Check if any pod labeled 'app=chaos-app' has reached '1/1' READY and 'Running' STATUS
-                        # Adjust app=chaos-app to match the exact label in your deployment.yaml
-                        STATUS_CHECK=$(kubectl get pods -l app=chaos-app -n flask-project --no-headers 2>/dev/null | awk '{print $2 " " $3}' | grep -E "1/1 Running" || true)
+                        # Direct lookup: Returns "true" if the container status is ready
+                        STATUS_CHECK=$(kubectl get pods -l app=chaos-app -n flask-project -o jsonpath='{.items[*].status.containerStatuses[*].ready}' 2>/dev/null)
                         
-                        if [ ! -z "$STATUS_CHECK" ]; then
-                            echo "✅ Found a healthy, running pod matching criteria: $STATUS_CHECK"
+                        if [ "$STATUS_CHECK" = "true" ]; then
+                            echo "✅ Found a healthy, running pod! Proceeding..."
                             MATCH_FOUND=true
                             break
                         fi
@@ -63,7 +62,7 @@ pipeline {
                     done
 
                     if [ "$MATCH_FOUND" = false ]; then
-                        echo "❌ Error: Pod failed to reach 1/1 Running state within the time limit."
+                        echo "❌ Error: Pod failed to reach a Ready state within the time limit."
                         exit 1
                     fi
                     
@@ -86,6 +85,6 @@ pipeline {
                     sh 'pkill -f "port-forward" || true'
                 }
             }
-        }
-    }
+        }   
+}
 }
