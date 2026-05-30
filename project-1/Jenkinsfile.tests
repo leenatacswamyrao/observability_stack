@@ -34,15 +34,15 @@ pipeline {
         }
     stage('Bridge & Run CRUD Tests') {
             steps {
-                echo 'Validating pod status and launching Playwright test suite...'
+                echo 'Validating cluster health and running concurrent test architecture...'
                 
                 withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
                     sh '''
-                        # 1. Clear any old port-forwards
+                        # 1. Clear any zombie bridges
                         pkill -f "port-forward" || true
                         
-                        # 2. Verify the pods are healthy before running tests
-                        echo "Checking for '1/1 Running' signature..."
+                        # 2. String status validation gate
+                        echo "Checking pod status..."
                         POD_STATUS=$(kubectl get pods -l app=chaos-app -n flask-project --no-headers \
                                       --server=https://host.docker.internal:54150 \
                                       --token="${K8S_TOKEN}" \
@@ -50,36 +50,26 @@ pipeline {
                                       | awk '{print $2 " " $3}' | grep "1/1 Running" || true)
                         
                         if [ -z "$POD_STATUS" ]; then
-                            echo "❌ Error: Pods are not reporting '1/1 Running'. Skipping tests."
+                            echo "❌ Error: Pods are not reporting '1/1 Running'."
                             exit 1
                         fi
                         
-                        echo "✅ Cluster health verified: ($POD_STATUS)."
+                        echo "✅ Pod status verified: ($POD_STATUS)"
                         
-                        # 3. Open the port-forward tunnel globally on IPv4
-                        echo "Starting network bridge..."
-                        kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project \
-                                --address=0.0.0.0 \
-                                --server=https://host.docker.internal:54150 \
-                                --token="${K8S_TOKEN}" \
-                                --insecure-skip-tls-verify=true > /dev/null 2>&1 &
-                        
-                        # Give the background bridge 3 seconds to latch
-                        sleep 3
-                        
-                        # 4. 🛑 THE FIX: Use the standard Docker IPv4 bridge gateway
+                        # 3. Execute both commands simultaneously in the foreground
                         cd project-1/chaos-app/
                         export PATH="$(pwd)/bin:$PATH"
                         
-                        echo "Launching tests against application endpoint..."
-                        page_url="http://172.17.0.1:5000" npx playwright test tests/crud.spec.js
+                        echo "Installing test runner utilities..."
+                        npm install concurrently --no-save
+                        
+                        echo "Launching live network tunnel and Playwright suite side-by-side..."
+                        page_url="http://127.0.0.1:5000" npx concurrently \
+                          --kill-others \
+                          --success first \
+                          "kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project --address=127.0.0.1 --server=https://host.docker.internal:54150 --token=${K8S_TOKEN} --insecure-skip-tls-verify=true" \
+                          "sleep 3 && npx playwright test tests/crud.spec.js"
                     '''
-                }
-            }
-            post {
-                always {
-                    echo 'Cleaning up network bridge...'
-                    sh 'pkill -f "port-forward" || true'
                 }
             }
         }
