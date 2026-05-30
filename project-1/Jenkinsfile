@@ -63,7 +63,7 @@ pipeline {
             steps {
                 echo 'Harness/Local deployment step completed. Handoff to test pipeline...'
                 // Triggers your brand-new independent testing pipeline and keeps moving
-                build job: 'chaos-app-crud-tests', wait: false 
+                build job: 'chaos-app-crud-tests', wait: true 
             }
         }
     }
