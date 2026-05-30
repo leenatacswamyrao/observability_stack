@@ -42,7 +42,7 @@ pipeline {
                     
                     # 2. Start background port forwarding to the service
                     echo "Opening port-forward tunnel..."
-                    kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
+                    kubectl port-forward svc/${K8S_SERVICE} 5000:5000 -n flask-project > /dev/null 2>&1 &
                     
                     # 🛑 THE FIX: Give the background process 2 seconds to bind to local port 5000
                     echo "Waiting for local port binding..."
