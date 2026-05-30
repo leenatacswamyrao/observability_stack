@@ -57,6 +57,7 @@ pipeline {
             }
         }
 
+<<<<<<< Updated upstream
         stage('Run Playwright Tests') {
             steps {
                     echo 'Launching Playwright container via shell...'
@@ -88,5 +89,14 @@ pipeline {
             echo 'Build passed flawlessly. No email spam needed!'
         }
     }
+=======
+     stage('Trigger Integration Tests') {
+    steps {
+        echo 'Triggering the independent CRUD test pipeline downstream...'
+        // Triggers your new job asynchronously and keeps moving
+        build job: 'chaos-app-crud-tests', wait: false 
+    }
+}
+>>>>>>> Stashed changes
     }
 }
