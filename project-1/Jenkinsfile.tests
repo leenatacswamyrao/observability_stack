@@ -33,25 +33,36 @@ pipeline {
             }
         }
 
-    stage('Bridge & Run CRUD Tests') {
+stage('Bridge & Run CRUD Tests') {
             steps {
-                echo 'Spanning network tunnel and running Playwright CRUD suite...'
+                echo 'Spanning network tunnel and waiting for application readiness...'
                 sh '''
-                    # 1. Force Jenkins to wait until the deployment is fully rolled out and ready
-                    echo "Checking Kubernetes deployment stability..."
-                    kubectl rollout status deployment/chaos-app-deployment --timeout=90s
-                    
-                    # 2. Clear any zombie port-forwards
+                    # 1. Clear any zombie port-forwards
                     pkill -f "port-forward" || true
                     
-                    # 3. Start background port forwarding
+                    # 2. Start background port forwarding to the service
                     echo "Opening port-forward tunnel to ${K8S_SERVICE}..."
                     kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
                     
-                    # 4. Give the background tunnel 3 seconds to bind to the port
-                    sleep 3
+                    # 3. Smart Network Gate: Wait until curl can reach the endpoint cleanly
+                    echo "Polling application endpoint for readiness..."
+                    ATTEMPTS=0
+                    MAX_ATTEMPTS=12
                     
-                    # 5. Execute the tests
+                    until curl -s -o /dev/null http://localhost:5000 || [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; do
+                        echo "Application warming up... waiting 5 seconds (Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS)"
+                        sleep 5
+                        ATTEMPTS=$((ATTEMPTS+1))
+                    done
+
+                    if [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; then
+                        echo "❌ Error: Application failed to initialize within time limit."
+                        exit 1
+                    fi
+
+                    echo "✅ Application is live! Running Playwright CRUD suite..."
+                    
+                    # 4. Execute the tests
                     cd project-1/chaos-app/
                     export PATH="$(pwd)/bin:$PATH"
                     page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
