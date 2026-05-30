@@ -35,30 +35,40 @@ pipeline {
 
 stage('Bridge & Run CRUD Tests') {
             steps {
-                echo 'Validating pod readiness using JSONPath and preparing network bridge...'
+                echo 'Establishing network bridge and checking endpoint health...'
                 sh '''
                     # 1. Clear any zombie port-forwards
                     pkill -f "port-forward" || true
                     
-                    # 2. Let Kubernetes natively block until the pod is 100% Ready
-                    echo "Waiting for chaos-app pod to reach Ready condition..."
-                    if kubectl wait --namespace=flask-project \
-                                  --for=condition=Ready \
-                                  pod -l app=chaos-app \
-                                  --timeout=60s; then
-                        echo "✅ Pod is fully ready and accepting traffic!"
-                    else
-                        echo "❌ Error: Pod did not reach ready state within timeout."
-                        exit 1
-                    fi                    
-                    # 3. Start background port forwarding now that we know a ready pod exists
-                    echo "Opening port-forward tunnel to ${K8S_SERVICE}..."
+                    # 2. Start background port forwarding to the service 
+                    # (Note: If this throws an auth error in your environment, we will wrap it in credentials next)
+                    echo "Opening port-forward tunnel..."
                     kubectl port-forward svc/${K8S_SERVICE} 5000:5000 > /dev/null 2>&1 &
                     
-                    # 4. Brief pause for the network tunnel to bind locally
-                    sleep 3
+                    # 3. Network Polling Gate: Wait up to 2 minutes for the endpoint to respond
+                    echo "Polling http://localhost:5000 for a valid response..."
+                    ATTEMPTS=0
+                    MAX_ATTEMPTS=24 # 24 attempts * 5 seconds = 2 minutes
+                    MATCH_FOUND=false
+
+                    while [ $ATTEMPTS -lt $MAX_ATTEMPTS ]; do
+                        if curl -s -o /dev/null http://localhost:5000; then
+                            echo "✅ Application is live and responding! Proceeding to tests..."
+                            MATCH_FOUND=true
+                            break
+                        fi
+                        
+                        echo "Endpoint not reachable yet... waiting 5 seconds (Attempt $((ATTEMPTS+1))/$MAX_ATTEMPTS)"
+                        sleep 5
+                        ATTEMPTS=$((ATTEMPTS+1))
+                    done
+
+                    if [ "$MATCH_FOUND" = false ]; then
+                        echo "❌ Error: Application endpoint failed to respond within timeout."
+                        exit 1
+                    fi
                     
-                    # 5. Execute the tests
+                    # 4. Execute the Playwright tests
                     cd project-1/chaos-app/
                     export PATH="$(pwd)/bin:$PATH"
                     page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
@@ -70,6 +80,6 @@ stage('Bridge & Run CRUD Tests') {
                     sh 'pkill -f "port-forward" || true'
                 }
             }
-        }   
+        }
 }
 }
