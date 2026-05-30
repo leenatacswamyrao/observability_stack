@@ -32,12 +32,10 @@ pipeline {
                 }
             }
         }
-
     stage('Bridge & Run CRUD Tests') {
             steps {
                 echo 'Validating pod string status before running tests...'
                 
-                // 🔐 Grab the token from your Jenkins credentials store
                 withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
                     sh '''
                         # 1. Clear any old port-forwards
@@ -58,9 +56,9 @@ pipeline {
                         
                         echo "✅ String match successful: ($POD_STATUS). Starting network bridge..."
                         
-                        # 3. Securely open the port-forward tunnel using the authenticated token
+                        # 3. 🛑 THE FIX: Force the port-forward to bind to BOTH IPv4 (0.0.0.0) and IPv6 (::)
                         kubectl port-forward svc/chaos-app-service 5000:5000 -n flask-project \
-                                --address=0.0.0.0 \
+                                --address=0.0.0.0,:: \
                                 --server=https://host.docker.internal:54150 \
                                 --token="${K8S_TOKEN}" \
                                 --insecure-skip-tls-verify=true > /dev/null 2>&1 &
@@ -68,10 +66,10 @@ pipeline {
                         # Give the background bridge a moment to latch
                         sleep 3
                         
-                        # 4. Release Playwright tests
+                        # 4. Release Playwright tests using your host configuration routing
                         cd project-1/chaos-app/
                         export PATH="$(pwd)/bin:$PATH"
-                        page_url="http://localhost:5000" npx playwright test tests/crud.spec.js
+                        page_url="http://host.docker.internal:5000" npx playwright test tests/crud.spec.js
                     '''
                 }
             }
@@ -82,5 +80,5 @@ pipeline {
                 }
             }
         }
-}
+   }
 }
