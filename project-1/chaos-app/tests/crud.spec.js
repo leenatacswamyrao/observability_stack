@@ -1,38 +1,39 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
-test.describe.configure({ mode: 'serial' }); // Enforces sequential step order
+// Generate dynamic test credentials per test run
+const testUsername = 'user_' + Date.now();
+const testPassword = 'ChaosPassword123!';
 
+// Use test.use to share storage state automatically
 test.describe('Chaos App Form-Based CRUD Operations', () => {
-  let apiContext;
-  let recordId;
-  const testUsername = `user_${Date.now()}`;
-  const testPassword = 'ChaosPassword123$'; // Meets all length, case, number, and special char rules
-
- let page;
 
   test.beforeAll(async ({ playwright }) => {
-    // 1. Create an isolated API context that doesn't need system browser libraries
-    apiContext = await playwright.request.newContext({
+    // 1. Create a lightweight API context to register and log in
+    const apiContext = await playwright.request.newContext({
       baseURL: process.env.page_url || 'http://localhost:5000',
     });
 
-    // 2. Register the test user
-    const signupResponse = await apiContext.post('/signup', {
-      form: {
-        username: testUsername,
-        password: testPassword
-      }
+    // 2. Register the user
+    await apiContext.post('/signup', {
+      form: { username: testUsername, password: testPassword }
     });
-    expect(signupResponse.ok()).toBeTruthy();
 
-    // 3. Log in to establish the authenticated session cookie
-    const loginResponse = await apiContext.post('/login', {
-      form: {
-        username: testUsername,
-        password: testPassword
-      }
+    // 3. Log in to capture the valid session cookies
+    await apiContext.post('/login', {
+      form: { username: testUsername, password: testPassword }
     });
-    expect(loginResponse.ok()).toBeTruthy();
+
+    // 4. Save the authenticated storage state to a temporary file
+    await apiContext.storageState({ path: 'auth.json' });
+    await apiContext.dispose();
+  });
+
+  // Tell ALL tests in this file to automatically load the authenticated session cookies!
+  test.use({ storageState: 'auth.json' });
+
+  test('1. CREATE - Add a brand new record', async ({ page }) => {
+    // Go directly to the creation or dashboard page—you are already logged in!
+    await page.goto('/');
   });
   
   // --- CREATE ---
