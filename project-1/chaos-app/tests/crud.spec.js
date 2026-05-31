@@ -6,7 +6,7 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
   let apiContext;
   let recordId;
   const testUsername = `user_${Date.now()}`;
-  const testPassword = 'Password123!'; // Meets all length, case, number, and special char rules
+  const testPassword = 'ChaosPassword123$'; // Meets all length, case, number, and special char rules
 
  test.beforeAll(async ({ playwright }) => {
     // 1. Enable followRedirect so Playwright follows Flask's redirect(url_for('login'))
