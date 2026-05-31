@@ -32,46 +32,50 @@ pipeline {
                 }
             }
         }
-stage('Bridge & Run CRUD Tests') {
-            steps {
-                echo 'Validating cluster health and running concurrent test architecture...'
+    stage('Bridge & Run CRUD Tests') {
+    steps {
+        echo 'Validating cluster health and running concurrent test architecture...'
+        
+        withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
+            sh '''
+                # 1. Clear any zombie bridges
+                pkill -f "port-forward" || true
                 
-                withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
-                    sh '''
-                        # 1. Clear any zombie bridges
-                        pkill -f "port-forward" || true
-                        
-                        # 2. String status validation gate
-                        echo "Checking pod status..."
-                        POD_STATUS=$(kubectl get pods -l app=chaos-app -n flask-project --no-headers \
-                                      --server=https://host.docker.internal:54150 \
-                                      --token="${K8S_TOKEN}" \
-                                      --insecure-skip-tls-verify=true \
-                                      | awk '{print $2 " " $3}' | grep "1/1 Running" || true)
-                        
-                        if [ -z "$POD_STATUS" ]; then
-                            echo "❌ Error: Pods are not reporting '1/1 Running'."
-                            exit 1
-                        fi
-                        
-                        echo "✅ Pod status verified: ($POD_STATUS)"
-                        
-                        # 3. Execute both commands simultaneously in the foreground
-                        cd project-1/chaos-app/
-                        export PATH="$(pwd)/bin:$PATH"
-                        
-                        echo "Installing test runner utilities..."
-                        npm install concurrently --no-save
-                        
-                        echo "Launching live network tunnel and Playwright suite side-by-side..."
-                        page_url="http://127.0.0.1:5000" npx concurrently \
-                          --kill-others \
-                          --success first \
-                          "kubectl port-forward svc/chaos-service 5000:5000 -n flask-project --address=127.0.0.1 --server=https://host.docker.internal:54150 --token=${K8S_TOKEN} --insecure-skip-tls-verify=true" \
-                          "sleep 3 && npx playwright test tests/crud.spec.js"
-                    '''
-                }
-            }
+                # 2. String status validation gate
+                echo "Checking pod status..."
+                POD_STATUS=$(kubectl get pods -l app=chaos-app -n flask-project --no-headers \
+                              --server=https://host.docker.internal:54150 \
+                              --token="${K8S_TOKEN}" \
+                              --insecure-skip-tls-verify=true \
+                              | awk '{print $2 " " $3}' | grep "1/1 Running" || true)
+                
+                if [ -z "$POD_STATUS" ]; then
+                    echo "❌ Error: Pods are not reporting '1/1 Running'."
+                    exit 1
+                fi
+                
+                echo "✅ Pod status verified: ($POD_STATUS)"
+                
+                # 3. Execute both commands simultaneously in the foreground
+                cd project-1/chaos-app/
+                export PATH="$(pwd)/bin:$PATH"
+                
+                echo "Installing test runner utilities..."
+                npm install concurrently --no-save
+                
+                # FIX: Inject missing Linux OS graphics packages before starting concurrently
+                echo "Patching missing container libraries..."
+                npx playwright install-deps chromium
+                
+                echo "Launching live network tunnel and Playwright suite side-by-side..."
+                page_url="http://127.0.0.1:5000" npx concurrently \
+                  --kill-others \
+                  --success first \
+                  "kubectl port-forward svc/chaos-service 5000:5000 -n flask-project --address=127.0.0.1 --server=https://host.docker.internal:54150 --token=${K8S_TOKEN} --insecure-skip-tls-verify=true" \
+                  "sleep 3 && npx playwright test tests/crud.spec.js"
+            '''
         }
+    }
+}
    }
 }
