@@ -3,11 +3,13 @@ import { test, expect } from '@playwright/test';
 const testUsername = 'user_static_test';
 const testPassword = 'ChaosPassword123!';
 let recordId;
-let authRequest; // Shared authenticated client instance
+let authRequest;
+
+// Helper function to let the port-forward socket breathe
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 test.describe('Chaos App Form-Based CRUD Operations', () => {
 
-  // This runs before EVERY test block and retry attempt, keeping the session alive
   test.beforeEach(async ({ playwright }) => {
     authRequest = await playwright.request.newContext({
       baseURL: process.env.page_url || 'http://127.0.0.1:5000',
@@ -18,10 +20,13 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
       form: { username: testUsername, password: testPassword }
     });
 
-    // 2. Log in to firmly plant the session cookies into this client instance
+    // 2. Log in
     await authRequest.post('/login', {
       form: { username: testUsername, password: testPassword }
     });
+
+    // CRITICAL FIX: Wait 500ms for the 'connection reset by peer' socket buffer to clear
+    await delay(500);
   });
 
   test.afterEach(async () => {
@@ -32,7 +37,6 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
 
   // --- CREATE ---
   test('1. CREATE - Add a brand new record', async () => {
-    // CRITICAL: Use the authRequest client instead of the sterile { request } fixture
     const response = await authRequest.post('/add', {
       form: { content: 'Chaos Engineering Initial Metric' }
     });
