@@ -31,6 +31,22 @@ class Record(db.Model):
 with app.app_context():
     db.create_all()
 
+# Insert this right below your db.create_all() block and above your routes in app.py
+
+@app.before_request
+def handle_automation_testing():
+    # If the secure token is passed from Jenkins/Playwright, inject a test session
+    if request.headers.get('X-Automation-Test-Token') == 'ChaosSecretToken123!':
+        # Ensure a default test user exists in the database context
+        test_user = User.query.filter_by(username='automation_test_user').first()
+        if not test_user:
+            test_user = User(username='automation_test_user', password='StaticHashedPasswordPlaceholder')
+            db.session.add(test_user)
+            db.session.commit()
+        
+        session['user_id'] = test_user.id
+        session['user_name'] = test_user.username
+
 # --- Routes ---
 
 @app.route('/')
