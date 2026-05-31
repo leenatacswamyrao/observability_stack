@@ -9,7 +9,7 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
 
   // Authenticate before EVERY test execution block to keep the network pipeline perfectly fresh
   test.beforeEach(async ({ request }) => {
-    // 1. Silent registration (fails gracefully if user already exists)
+    // 1. Silent registration
     await request.post('/signup', {
       form: { username: testUsername, password: testPassword }
     });
