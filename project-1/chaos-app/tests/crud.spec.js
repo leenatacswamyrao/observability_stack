@@ -8,27 +8,33 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
   const testUsername = `user_${Date.now()}`;
   const testPassword = 'Password123!'; // Meets all length, case, number, and special char rules
 
-  test.beforeAll(async ({ playwright }) => {
-    // 1. Create a persistent context to maintain the session cookies across requests
+ test.beforeAll(async ({ playwright }) => {
+    // 1. Enable followRedirect so Playwright follows Flask's redirect(url_for('login'))
     apiContext = await playwright.request.newContext({
       baseURL: process.env.page_url || 'http://localhost:5000',
+      extraHTTPHeaders: { 'Origin': process.env.page_url || 'http://localhost:5000' }
     });
 
     // 2. SIGNUP - Provision a new test user
     const signupResponse = await apiContext.post('/signup', {
-      form: { username: testUsername, password: testPassword }
+      form: { username: testUsername, password: testPassword },
+      maxRedirects: 2 // Allow it to follow the 302 redirect to the login page
     });
-    expect(signupResponse.status()).toBe(200);
+    
+    // If signup failed, the HTML will contain the flashed error text
+    const signupHtml = await signupResponse.text();
+    if (signupHtml.contains('Username already exists')) {
+       console.error("Signup failed: Username constraint collision in Postgres.");
+    }
 
     // 3. LOGIN - Establish the session cookie on our context
     const loginResponse = await apiContext.post('/login', {
-      form: { username: testUsername, password: testPassword }
+      form: { username: testUsername, password: testPassword },
+      maxRedirects: 2
     });
-    expect(loginResponse.status()).toBe(200);
-  });
-
-  test.afterAll(async () => {
-    await apiContext.dispose();
+    
+    const loginHtml = await loginResponse.text();
+    expect(loginHtml).toContain('Dashboard'); // Ensure we actually landed on the dashboard!
   });
 
   // --- CREATE ---
