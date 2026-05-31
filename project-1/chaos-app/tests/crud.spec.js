@@ -25,12 +25,14 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
     });
   });
 
-  // Clean up the context when the entire suite completes
-  test.afterAll(async () => {
-    if (sharedContext) {
-      await sharedContext.dispose();
-    }
+  // This saves the cookie jar physically to disk
+    await setupContext.storageState({ path: 'playwright/.auth/user.json' });
+    await setupContext.dispose();
   });
+
+  // 2. Tell Playwright to automatically inject those cookies into ALL tests down below
+  test.use({ storageState: 'playwright/.auth/user.json' });
+
 
   // --- CREATE ---
   test('1. CREATE - Add a brand new record', async () => {
