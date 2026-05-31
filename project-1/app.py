@@ -9,7 +9,10 @@ app.secret_key = 'super-secret-key-for-lab-use'
 
 # Database Configuration
 # This creates a file 'site.db' in your project folder
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL', 
+    'postgresql://chaos_user:chaos_password@postgres-service:5432/chaos_db'
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
