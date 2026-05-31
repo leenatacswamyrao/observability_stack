@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
 
+// Helper function to slow down the network execution rate
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 test.describe('Chaos App Form-Based CRUD Operations', () => {
   
-  // Running everything inside one continuous sequence forces the API context
-  // to preserve cookies and session state perfectly across your operations.
   test('Execute Complete Lifecycle Sequential CRUD Flow', async ({ request }) => {
-    const testUsername = `user_${Date.now()}`; // Unique username to prevent conflicts
+    const testUsername = `user_${Date.now()}`; 
     const testPassword = 'ChaosPassword123!';
     let recordId;
 
@@ -21,6 +22,10 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
     });
     expect(loginResponse.ok()).toBeTruthy();
 
+    // CRITICAL BUFFER FIX: Give the kubectl port-forward tunnel 1 second to clear 
+    // its 'connection reset by peer' TCP socket state before hitting the next endpoint.
+    await delay(1000);
+
     // 3. --- CREATE ---
     const createResponse = await request.post('/add', {
       form: { content: 'Chaos Engineering Initial Metric' }
@@ -30,7 +35,6 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
     const dashboardHtml = await createResponse.text();
     expect(dashboardHtml).toContain('Chaos Engineering Initial Metric');
 
-    // Extract the created record ID from the dashboard links
     const match = dashboardHtml.match(/\/edit\/(\d+)/);
     expect(match).not.toBeNull();
     recordId = match[1];
