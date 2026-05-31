@@ -1,28 +1,41 @@
 import { test, expect } from '@playwright/test';
 
-// Declare file-level variables for data sharing across steps
+// 1. Declare file-level variables for data and context sharing
 const testUsername = 'user_' + Date.now();
 const testPassword = 'ChaosPassword123!';
+let sharedContext;
 let recordId; 
 
 test.describe('Chaos App Form-Based CRUD Operations', () => {
 
-  // Authenticate before EVERY test execution block to keep the network pipeline perfectly fresh
-  test.beforeEach(async ({ request }) => {
-    // 1. Silent registration
-    await request.post('/signup', {
+  // Create the context and authenticate ONCE for the entire test file execution
+  test.beforeAll(async ({ playwright }) => {
+    sharedContext = await playwright.request.newContext({
+      baseURL: process.env.page_url || 'http://localhost:5000',
+    });
+
+    // Register the test user
+    await sharedContext.post('/signup', {
       form: { username: testUsername, password: testPassword }
     });
 
-    // 2. Clear the authentication gate to bind session cookies directly to this execution worker
-    await request.post('/login', {
+    // Log in to capture the valid session cookies inside this specific instance
+    await sharedContext.post('/login', {
       form: { username: testUsername, password: testPassword }
     });
   });
 
+  // Clean up the context when the entire suite completes
+  test.afterAll(async () => {
+    if (sharedContext) {
+      await sharedContext.dispose();
+    }
+  });
+
   // --- CREATE ---
-  test('1. CREATE - Add a brand new record', async ({ request }) => {
-    const response = await request.post('/add', {
+  test('1. CREATE - Add a brand new record', async () => {
+    // CRITICAL: Use sharedContext directly instead of the isolated { request } fixture!
+    const response = await sharedContext.post('/add', {
       form: { content: 'Chaos Engineering Initial Metric' }
     });
     
@@ -39,10 +52,10 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
   });
 
   // --- READ ---
-  test('2. READ - View the specific edit page for the record', async ({ request }) => {
+  test('2. READ - View the specific edit page for the record', async () => {
     test.skip(!recordId, 'Skipping Read: Record ID was not successfully captured.');
 
-    const response = await request.get(`/edit/${recordId}`);
+    const response = await sharedContext.get(`/edit/${recordId}`);
     expect(response.status()).toBe(200);
     
     const editPageHtml = await response.text();
@@ -50,10 +63,10 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
   });
 
   // --- UPDATE ---
-  test('3. UPDATE - Modify the existing record text', async ({ request }) => {
+  test('3. UPDATE - Modify the existing record text', async () => {
     test.skip(!recordId, 'Skipping Update: Record ID was not successfully captured.');
 
-    const response = await request.post(`/edit/${recordId}`, {
+    const response = await sharedContext.post(`/edit/${recordId}`, {
       form: { content: 'Chaos Engineering MUTATED Metric' }
     });
     expect(response.ok()).toBeTruthy();
@@ -63,10 +76,10 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
   });
 
   // --- DELETE ---
-  test('4. DELETE - Evict the record and purge it', async ({ request }) => {
+  test('4. DELETE - Evict the record and purge it', async () => {
     test.skip(!recordId, 'Skipping Delete: Record ID was not successfully captured.');
 
-    const response = await request.get(`/delete/${recordId}`);
+    const response = await sharedContext.get(`/delete/${recordId}`);
     expect(response.ok()).toBeTruthy();
 
     const dashboardHtml = await response.text();
