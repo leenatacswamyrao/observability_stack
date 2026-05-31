@@ -77,6 +77,8 @@ spec:
           value: chaos_password
         - name: POSTGRES_DB
           value: chaos_db
+        - name: PGTZ
+          value: "UTC"
         ports:
         - containerPort: 5432
 ---
