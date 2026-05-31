@@ -4,7 +4,7 @@ let recordId;
 
 test.describe('Chaos App Form-Based CRUD Operations', () => {
 
-  // Inject the secure token into every single outgoing HTTP request automatically
+  // Automatically append the secure automation token to every single network request
   test.use({
     extraHTTPHeaders: {
       'X-Automation-Test-Token': 'ChaosSecretToken123!'
