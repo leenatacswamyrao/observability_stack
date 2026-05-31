@@ -30,16 +30,12 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
 
   // Tell ALL tests in this file to automatically load the authenticated session cookies!
   test.use({ storageState: 'auth.json' });
-
-  test('1. CREATE - Add a brand new record', async ({ page }) => {
-    // Go directly to the creation or dashboard page—you are already logged in!
-    await page.goto('/');
-  });
   
   // --- CREATE ---
   test('1. CREATE - Add a brand new record', async () => {
     const response = await apiContext.post('/add', {
       form: { content: 'Chaos Engineering Initial Metric' }
+      await page.goto('/');
     });
     
     // Flask redirects back to /dashboard on success (Status 200 or 302 depending on followRedirect)
