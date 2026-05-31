@@ -3,9 +3,9 @@ import { test, expect } from '@playwright/test';
 const testUsername = 'automation_user_final';
 const testPassword = 'ChaosPassword123!';
 let recordId;
-let sessionContext;
+let sessionContext; // Persistent container to hold session cookies across steps
 
-// 1. Establish a single, persistent session context for the whole file
+// 1. Establish the context once and log in
 test.beforeAll(async ({ playwright }) => {
   sessionContext = await playwright.request.newContext({
     baseURL: process.env.page_url || 'http://127.0.0.1:5000',
@@ -16,13 +16,13 @@ test.beforeAll(async ({ playwright }) => {
     form: { username: testUsername, password: testPassword }
   });
 
-  // Log in once to secure the session cookie inside this specific context instance
+  // Log in to capture the session cookie into this specific instance
   await sessionContext.post('/login', {
     form: { username: testUsername, password: testPassword }
   });
 });
 
-// Clean up the network connection context when everything finishes
+// Clean up the connection context when everything finishes
 test.afterAll(async () => {
   if (sessionContext) {
     await sessionContext.dispose();
@@ -32,7 +32,7 @@ test.afterAll(async () => {
 test.describe('Chaos App Form-Based CRUD Operations', () => {
 
   // --- CREATE ---
-  // FIX: We do NOT pass { request } in the arguments. We use our authenticated sessionContext.
+  // FIX: Notice we do NOT pass { request } here. We use the persistent sessionContext variable!
   test('1. CREATE - Add a brand new record', async () => {
     const response = await sessionContext.post('/add', {
       form: { content: 'Chaos Engineering Initial Metric' }
