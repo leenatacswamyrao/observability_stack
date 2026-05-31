@@ -35,15 +35,16 @@ with app.app_context():
 
 @app.before_request
 def handle_automation_testing():
-    # If the secure token is passed from Jenkins/Playwright, inject a test session
+    # Detect the secure header from your Jenkins pipeline
     if request.headers.get('X-Automation-Test-Token') == 'ChaosSecretToken123!':
-        # Ensure a default test user exists in the database context
-        test_user = User.query.filter_by(username='automation_test_user').first()
+        # Safely seed an automation test user if it doesn't exist yet
+        test_user = User.query.filter_by(username='automation_user').first()
         if not test_user:
-            test_user = User(username='automation_test_user', password='StaticHashedPasswordPlaceholder')
+            test_user = User(username='automation_user', password='StaticHashedPasswordPlaceholder')
             db.session.add(test_user)
             db.session.commit()
         
+        # Explicitly lock the active session context to this user
         session['user_id'] = test_user.id
         session['user_name'] = test_user.username
 
