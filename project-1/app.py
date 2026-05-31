@@ -8,7 +8,6 @@ app = Flask(__name__)
 app.secret_key = 'super-secret-key-for-lab-use'
 
 # Database Configuration
-# This creates a file 'site.db' in your project folder
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 
     'postgresql://chaos_user:chaos_password@postgres-service:5432/chaos_db'
@@ -20,7 +19,8 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    # FIX: Expanded column size from 50 to 256 to stop string truncation on security hashes
+    password = db.Column(db.String(256), nullable=False) 
 
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -45,7 +45,7 @@ def signup():
         username = request.form['username']
         password = request.form['password']
 
-        #Combination layer for password
+        # Combination layer validation
         if len(password) < 8:
             flash("Password must be at least 8 characters long.", "warning")
             return render_template('signup.html')
@@ -59,15 +59,16 @@ def signup():
             flash("Password must contain at least one special character.", "warning")
             return render_template('signup.html')
         
-        #Hashing password only if above criteria is met
-        hashed_pw = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
-        new_user = User(username=request.form['username'], password=hashed_pw)
+        # Hashing password now stores safely inside the expanded schema
+        hashed_pw = generate_password_hash(password, method='pbkdf2:sha256')
+        new_user = User(username=username, password=hashed_pw)
         try:
             db.session.add(new_user)
             db.session.commit()
             flash("Account created!")
             return redirect(url_for('login'))
-        except:
+        except Exception as e:
+            db.session.rollback()
             flash("Username already exists.")
     return render_template('signup.html')
 
@@ -75,7 +76,6 @@ def signup():
 def login():
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username']).first()
-        # check_password_hash(hash_from_db, password_from_form)
         if user and check_password_hash(user.password, request.form['password']):
             session['user_id'] = user.id
             session['user_name'] = user.username
@@ -85,24 +85,24 @@ def login():
 
 @app.route('/dashboard')
 def dashboard():
-    if 'user_id' not in session: return redirect(url_for('login'))
-    # Fetch only records belonging to this user
+    if 'user_id' not in session: 
+        return redirect(url_for('login'))
     user_records = Record.query.filter_by(user_id=session['user_id']).all()
     return render_template('dashboard.html', records=user_records)
 
 @app.route('/add', methods=['POST'])
 def add_record():
     if 'user_id' in session:
-        # Create the object
         new_record = Record(content=request.form.get('content'), user_id=session['user_id'])
-        # Add it to the "transaction"
         db.session.add(new_record)
-        # PUSH it to the database file (Crucial!)
         db.session.commit()
     return redirect(url_for('dashboard'))
 
 @app.route('/edit/<int:record_id>', methods=['GET', 'POST'])
 def edit_record(record_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+        
     record = Record.query.get_or_404(record_id)
     if record.user_id != session.get('user_id'):
         return redirect(url_for('dashboard'))
@@ -115,6 +115,9 @@ def edit_record(record_id):
 
 @app.route('/delete/<int:record_id>')
 def delete_record(record_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+        
     record = Record.query.get(record_id)
     if record and record.user_id == session['user_id']:
         db.session.delete(record)
