@@ -23,7 +23,7 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
     
     // If signup failed, the HTML will contain the flashed error text
     const signupHtml = await signupResponse.text();
-    if (signupHtml.contains('Username already exists')) {
+    if (signupHtml.includes('Username already exists')) {
        console.error("Signup failed: Username constraint collision in Postgres.");
     }
 
