@@ -1,4 +1,4 @@
-const { defineConfig, devices } = require('@playwright/test');
+const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
@@ -11,12 +11,16 @@ module.exports = defineConfig({
     // Falls back to localhost:5000 if page_url isn't explicitly passed
     baseURL: process.env.page_url || 'http://localhost:5000',
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
   },
+  
+  // FIX: Remove { ...devices['Desktop Chrome'] } 
+  // Defining 'browserName: undefined' forces Playwright to run pure API requests.
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'api-suite',
+      use: { 
+        browserName: undefined 
+      },
     },
   ],
 });
