@@ -11,31 +11,30 @@ test.describe('Chaos App Form-Based CRUD Operations', () => {
  let page;
 
   test.beforeAll(async ({ playwright }) => {
-    // 1. Launch a real browser instance to handle state and cookies perfectly
-    const browser = await playwright.chromium.launch();
-    const context = await browser.newContext({
+    // 1. Create an isolated API context that doesn't need system browser libraries
+    apiContext = await playwright.request.newContext({
       baseURL: process.env.page_url || 'http://localhost:5000',
     });
-    page = await context.newPage();
 
-    // 2. SIGNUP - Fill out the signup interface
-    await page.goto('/signup');
-    await page.fill('input[name="username"]', testUsername);
-    await page.fill('input[name="password"]', testPassword);
-    await page.click('button[type="submit"]');
+    // 2. Register the test user
+    const signupResponse = await apiContext.post('/signup', {
+      form: {
+        username: testUsername,
+        password: testPassword
+      }
+    });
+    expect(signupResponse.ok()).toBeTruthy();
 
-    // 3. LOGIN - Authenticate to capture the valid session state
-    await page.goto('/login');
-    await page.fill('input[name="username"]', testUsername);
-    await page.fill('input[name="password"]', testPassword);
-    await page.click('button[type="submit"]');
-
-    // Verify we cleared the gate and landed on the dashboard layout
-    await expect(page).toHaveURL(/.*dashboard/);
-    
-    // Share the cookies back to your main execution context
-    apiContext = context.request;
+    // 3. Log in to establish the authenticated session cookie
+    const loginResponse = await apiContext.post('/login', {
+      form: {
+        username: testUsername,
+        password: testPassword
+      }
+    });
+    expect(loginResponse.ok()).toBeTruthy();
   });
+  
   // --- CREATE ---
   test('1. CREATE - Add a brand new record', async () => {
     const response = await apiContext.post('/add', {
