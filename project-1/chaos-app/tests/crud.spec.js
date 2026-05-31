@@ -2,33 +2,38 @@ import { test, expect } from '@playwright/test';
 
 const testUsername = 'user_static_test';
 const testPassword = 'ChaosPassword123!';
+let savedCookies = []; // Store cookies dynamically in memory
 let recordId;
 
 test.describe('Chaos App Form-Based CRUD Operations', () => {
 
-  // FIX: Added 'async' explicitly right here so the await engine can parse correctly
+  // 1. One-time setup to validate credentials and capture cookies in memory
   test.beforeAll(async ({ playwright }) => {
     const setupContext = await playwright.request.newContext({
       baseURL: process.env.page_url || 'http://localhost:5000',
     });
 
-    // Register user (ignores if already exists)
+    // Register user
     await setupContext.post('/signup', {
       form: { username: testUsername, password: testPassword }
     });
 
-    // Log in and save the session cookie state to a local file
+    // Log in to verify credentials and generate a fresh session token
     await setupContext.post('/login', {
       form: { username: testUsername, password: testPassword }
     });
 
-    // This saves the cookie jar physically to disk
-    await setupContext.storageState({ path: 'playwright/.auth/user.json' });
+    // Extract the valid session cookies directly from memory
+    savedCookies = await setupContext.cookies();
     await setupContext.dispose();
   });
 
-  // Tell Playwright to automatically inject those cookies into ALL tests down below
-  test.use({ storageState: 'playwright/.auth/user.json' });
+  // 2. Intercept the test execution fixture to apply the active cookies manually
+  test.beforeEach(async ({ context }) => {
+    if (savedCookies.length > 0) {
+      await context.addCookies(savedCookies);
+    }
+  });
 
   // --- CREATE ---
   test('1. CREATE - Add a brand new record', async ({ request }) => {
