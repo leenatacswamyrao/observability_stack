@@ -72,16 +72,21 @@ pipeline {
             sleep 2
 
             echo "Creating a chaos metric record..."
-            # FIX: Added --post302 to force curl to switch to GET when following the redirect to /dashboard
-            DASHBOARD_HTML=$(curl -s -L --post302 -X POST http://127.0.0.1:5000/add \
+            # 1. Submit the POST request WITHOUT -L so it doesn't try to follow the redirect blindly
+            curl -s -X POST http://127.0.0.1:5000/add \
               -d "content=Automated Pipeline Metric" \
+              -b cookie_jar.txt
+            
+            echo "Fetching updated dashboard content..."
+            # 2. Make an explicit, completely fresh GET request to view the dashboard data
+            DASHBOARD_HTML=$(curl -s -X GET http://127.0.0.1:5000/dashboard \
               -b cookie_jar.txt)
             
             echo "Validating dashboard content..."
             if echo "$DASHBOARD_HTML" | grep -q "Automated Pipeline Metric"; then
                 echo "SUCCESS: CRUD lifecycle fully functional over the cluster bridge!"
             else
-                echo "ERROR: Data replication check failed."
+                echo "ERROR: Data replication check failed. Metric not found on dashboard."
                 kill $TUNNEL_PID
                 exit 1
             fi
