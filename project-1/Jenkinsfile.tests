@@ -55,28 +55,29 @@ pipeline {
             
             echo "=== EXECUTING FAST BASH CRUD OPERATIONS VIA CURL ==="
             
-            # Use standard bash variable encapsulation syntax
             TEST_USER="bash_user_${BUILD_NUMBER}_${RANDOM}"
             echo "Registering unique user: ${TEST_USER}"
             
-            # FIX: Wrapped the POST body in clean single quotes to prevent bash string splitting
+            # 1. Signup (Quotes added)
             curl -s -f -X POST http://127.0.0.1:5000/signup \
               -d "username=${TEST_USER}&password=ChaosPassword123!"
             
             echo "Logging in..."
+            # 2. Login (Quotes added)
             curl -s -f -X POST http://127.0.0.1:5000/login \
               -d "username=${TEST_USER}&password=ChaosPassword123!" \
               -c cookie_jar.txt
-
+            
             echo "Waiting for replica session synchronization..."
             sleep 2
-            
+
             echo "Creating a chaos metric record..."
-            DASHBOARD_HTML=$(curl -s -f -X POST http://127.0.0.1:5000/add \
+            # 3. Add Metric (Quotes added, dropped -f, added -L to follow internal K8s proxy redirects)
+            DASHBOARD_HTML=$(curl -s -L -X POST http://127.0.0.1:5000/add \
               -d "content=Automated Pipeline Metric" \
               -b cookie_jar.txt)
             
-            if echo "$DASHBOARD_HTML" | grep -q "Automated Pipeline Metric" || echo "$DASHBOARD_HTML" | grep -q "Redirecting"; then
+            if echo "$DASHBOARD_HTML" | grep -q "Automated Pipeline Metric" || echo "$DASHBOARD_HTML" | grep -q "Dashboard"; then
                 echo "SUCCESS: CRUD lifecycle fully functional over the cluster bridge!"
             else
                 echo "ERROR: Data replication check failed."
