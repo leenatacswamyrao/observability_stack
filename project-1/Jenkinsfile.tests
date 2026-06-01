@@ -72,12 +72,13 @@ pipeline {
             sleep 2
 
             echo "Creating a chaos metric record..."
-            # 3. Add Metric (Quotes added, dropped -f, added -L to follow internal K8s proxy redirects)
-            DASHBOARD_HTML=$(curl -s -L -X POST http://127.0.0.1:5000/add \
+            # FIX: Added --post302 to force curl to switch to GET when following the redirect to /dashboard
+            DASHBOARD_HTML=$(curl -s -L --post302 -X POST http://127.0.0.1:5000/add \
               -d "content=Automated Pipeline Metric" \
               -b cookie_jar.txt)
             
-            if echo "$DASHBOARD_HTML" | grep -q "Automated Pipeline Metric" || echo "$DASHBOARD_HTML" | grep -q "Dashboard"; then
+            echo "Validating dashboard content..."
+            if echo "$DASHBOARD_HTML" | grep -q "Automated Pipeline Metric"; then
                 echo "SUCCESS: CRUD lifecycle fully functional over the cluster bridge!"
             else
                 echo "ERROR: Data replication check failed."
