@@ -36,7 +36,7 @@ pipeline {
     steps {
         sh '''
         # 1. Start the port forward in the background
-        kubectl port-forward svc/postgres-service 5000:5432 > /dev/null 2>&1 &
+        kubectl port-forward svc/postgres-service 5000:5000 > /dev/null 2>&1 &
         
         # Save the process ID of the tunnel so we can clean it up later
         TUNNEL_PID=$!
