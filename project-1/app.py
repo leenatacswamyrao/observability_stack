@@ -37,7 +37,7 @@ class Metric(db.Model):
 with app.app_context():
     try:
         print("Resetting database schemas to fix model drift...")
-        db.drop_all()  # Crucial: Drops the old broken schemas so they rebuild perfectly
+      #  db.drop_all()  # Crucial: Drops the old broken schemas so they rebuild perfectly
         db.create_all()
         print("Database tables synced successfully!")
     except Exception as e:
