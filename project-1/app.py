@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re
 
 app = Flask(__name__)
-app.secret_key = 'super-secret-key-for-lab-use'
+app.secret_key = os.environ.get('SECRET_KEY', 'chaos_secret_key')
 
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
@@ -15,39 +15,33 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# --- Database Models ---
+# ----------------------------------------------------
+# 1. DEFINE MODELS
+# ----------------------------------------------------
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    # FIX: Expanded column size from 50 to 256 to stop string truncation on security hashes
-    password = db.Column(db.String(256), nullable=False) 
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
 
-class Record(db.Model):
+class Metric(db.Model):
+    __tablename__ = 'metrics'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-# Create the database tables
+# ----------------------------------------------------
+# 2. AUTOMATIC SCHEMA CREATION ON STARTUP
+# ----------------------------------------------------
+# Wrapping this in application context forces Flask to connect 
+# to Postgres and generate the tables if they don't exist yet.
 with app.app_context():
-    db.create_all()
-
-# Insert this right below your db.create_all() block and above your routes in app.py
-
-@app.before_request
-def handle_automation_testing():
-    # Detect the secure header from your Jenkins pipeline
-    if request.headers.get('X-Automation-Test-Token') == 'ChaosSecretToken123!':
-        # Safely seed an automation test user if it doesn't exist yet
-        test_user = User.query.filter_by(username='automation_user').first()
-        if not test_user:
-            test_user = User(username='automation_user', password='StaticHashedPasswordPlaceholder')
-            db.session.add(test_user)
-            db.session.commit()
+    try:
+        print("Initializing database tables...")
+        db.create_all()
+        print("Database tables verified/created successfully!")
+    except Exception as e:
+        print(f"Error initializing database tables: {e}")
         
-        # Explicitly lock the active session context to this user
-        session['user_id'] = test_user.id
-        session['user_name'] = test_user.username
-
 # --- Routes ---
 
 @app.route('/')
