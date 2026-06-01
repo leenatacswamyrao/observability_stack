@@ -104,7 +104,7 @@ def dashboard():
 @app.route('/add', methods=['POST'])
 def add_record():
     if 'user_id' in session:
-        new_record = Record(content=request.form.get('content'), user_id=session['user_id'])
+        new_record = Metric(content=request.form.get('content'), user_id=session['user_id'])
         db.session.add(new_record)
         db.session.commit()
     return redirect(url_for('dashboard'))
