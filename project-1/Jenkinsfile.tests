@@ -50,7 +50,7 @@ pipeline {
             echo "Targeting Pod: ${POD_NAME}"
             
             # Fire up the proxy tunnel in the background
-            kubectl port-forward pod/${POD_NAME} 5000:5000 > /dev/null 2>&1 &
+            kubectl port-forward pod/${POD_NAME} -n flask-project 5000:5000 > /dev/null 2>&1 &
             TUNNEL_PID=$!
             
             echo "Allowing network proxy bridge to stabilize..."
