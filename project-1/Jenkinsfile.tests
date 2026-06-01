@@ -35,20 +35,21 @@ pipeline {
       stage('Bridge & Run CRUD Tests') {
     steps {
         sh '''
-        # 1. CORRECT TARGET: Forward local port 5000 to the FLASK WEB SERVICE's port 5000
-        kubectl port-forward svc/chaos-app-service 5000:5000 > /dev/null 2>&1 &
+        # 1. Target the app pod directly using its label (app=chaos-app)
+        # Change 'chaos-app' if your deployment uses a different label name
+        kubectl port-forward deployment/chaos-app 5000:5000 > /dev/null 2>&1 &
         
         TUNNEL_PID=$!
         
-        # 2. Wait until the web service port is actively answering
-        echo "Waiting for web application tunnel to establish..."
+        # 2. Wait until local port 5000 is genuinely accepting traffic
+        echo "Waiting for the application tunnel to establish..."
         timeout 15 bash -c 'until printf "" 2>>/dev/null >/dev/tcp/127.0.0.1/5000; do sleep 1; done'
-        echo "Web app is reachable! Starting tests..."
+        echo "Application is reachable! Starting tests..."
         
-        # 3. Run your clean, flattened sequential test script
+        # 3. Run the tests
         npx playwright test
         
-        # 4. Tear down the background process safely
+        # 4. Clean up the tunnel safely
         kill $TUNNEL_PID
         '''
     }
