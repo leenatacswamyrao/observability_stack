@@ -34,17 +34,22 @@ pipeline {
         }
     stage('Bridge & Run CRUD Tests') {
     steps {
-        sh '''
-        echo "=== DIAGNOSTIC LAYER: DISCOVERING KUBERNETES RESOURCES ==="
-        kubectl get services -n default
-        kubectl get deployments -n default
-        kubectl get pods -n default
-        echo "=========================================================="
-        
-        # Temporary fallback to let the stage pass while we check the log output
-        exit 1
-        '''
+        // Wrap the shell commands inside your Jenkins cluster credential token context
+        withKubeConfig([credentialsId: 'kubernetes-cluster-secret-token', serverUrl: 'https://your-cluster-api-endpoint:6443']) {
+            sh '''
+            # Now kubectl has permission to fetch resources!
+            POD_NAME=$(kubectl get pods -l app=chaos-app -o jsonpath="{.items[0].metadata.name}")
+            
+            kubectl port-forward pod/${POD_NAME} 5000:5000 > /dev/null 2>&1 &
+            TUNNEL_PID=$!
+            
+            sleep 5
+            npx playwright test
+            
+            kill $TUNNEL_PID
+            '''
+        }
     }
-}  
+}
     }
 }
