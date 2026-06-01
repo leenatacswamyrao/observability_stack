@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # ----------------------------------------------------
-# 1. DEFINE MODELS
+# 1. DEFINE MODELS (Aligned & Linked)
 # ----------------------------------------------------
 class User(db.Model):
     __tablename__ = 'users'
@@ -28,17 +28,16 @@ class Metric(db.Model):
     __tablename__ = 'metrics'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
+    # FIX: Added the missing relationship link to the User model
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
 # ----------------------------------------------------
-# 2. AUTOMATIC SCHEMA CREATION ON STARTUP
+# 2. AUTOMATIC SCHEMA RESET ON STARTUP
 # ----------------------------------------------------
-# Wrapping this in application context forces Flask to connect 
-# to Postgres and generate the tables if they don't exist yet.
 with app.app_context():
     try:
-        print("Syncing database schema...")
-        # Optional: Un-comment the line below if you want to completely clear out old broken tables
-        # db.drop_all() 
+        print("Resetting database schemas to fix model drift...")
+        db.drop_all()  # Crucial: Drops the old broken schemas so they rebuild perfectly
         db.create_all()
         print("Database tables synced successfully!")
     except Exception as e:
@@ -58,7 +57,6 @@ def signup():
         username = request.form['username']
         password = request.form['password']
 
-        # Combination layer validation
         if len(password) < 8:
             flash("Password must be at least 8 characters long.", "warning")
             return render_template('signup.html')
@@ -72,7 +70,6 @@ def signup():
             flash("Password must contain at least one special character.", "warning")
             return render_template('signup.html')
         
-        # Hashing password now stores safely inside the expanded schema
         hashed_pw = generate_password_hash(password, method='pbkdf2:sha256')
         new_user = User(username=username, password=hashed_pw)
         try:
@@ -100,12 +97,14 @@ def login():
 def dashboard():
     if 'user_id' not in session: 
         return redirect(url_for('login'))
-    user_records = Record.query.filter_by(user_id=session['user_id']).all()
+    # FIX: Changed 'Record' to 'Metric'
+    user_records = Metric.query.filter_by(user_id=session['user_id']).all()
     return render_template('dashboard.html', records=user_records)
 
 @app.route('/add', methods=['POST'])
 def add_record():
     if 'user_id' in session:
+        # FIX: Metric constructor now matches the model columns perfectly
         new_record = Metric(content=request.form.get('content'), user_id=session['user_id'])
         db.session.add(new_record)
         db.session.commit()
@@ -116,7 +115,8 @@ def edit_record(record_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
         
-    record = Record.query.get_or_404(record_id)
+    # FIX: Changed 'Record' to 'Metric'
+    record = Metric.query.get_or_404(record_id)
     if record.user_id != session.get('user_id'):
         return redirect(url_for('dashboard'))
     
@@ -131,7 +131,8 @@ def delete_record(record_id):
     if 'user_id' not in session:
         return redirect(url_for('login'))
         
-    record = Record.query.get(record_id)
+    # FIX: Changed 'Record' to 'Metric'
+    record = Metric.query.get(record_id)
     if record and record.user_id == session['user_id']:
         db.session.delete(record)
         db.session.commit()
