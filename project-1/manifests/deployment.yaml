@@ -20,6 +20,9 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://chaos_user:chaos_password@postgres-service:5432/chaos_db"
         resources:
           requests:
             memory: "64Mi"
