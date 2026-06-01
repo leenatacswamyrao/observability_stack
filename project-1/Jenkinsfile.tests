@@ -67,6 +67,9 @@ pipeline {
             curl -s -f -X POST http://127.0.0.1:5000/login \
               -d "username=${TEST_USER}&password=ChaosPassword123!" \
               -c cookie_jar.txt
+
+            echo "Waiting for replica session synchronization..."
+            sleep 2
             
             echo "Creating a chaos metric record..."
             DASHBOARD_HTML=$(curl -s -f -X POST http://127.0.0.1:5000/add \
