@@ -36,11 +36,13 @@ class Metric(db.Model):
 # to Postgres and generate the tables if they don't exist yet.
 with app.app_context():
     try:
-        print("Initializing database tables...")
+        print("Syncing database schema...")
+        # Optional: Un-comment the line below if you want to completely clear out old broken tables
+        # db.drop_all() 
         db.create_all()
-        print("Database tables verified/created successfully!")
+        print("Database tables synced successfully!")
     except Exception as e:
-        print(f"Error initializing database tables: {e}")
+        print(f"Database sync failed: {e}")
         
 # --- Routes ---
 
