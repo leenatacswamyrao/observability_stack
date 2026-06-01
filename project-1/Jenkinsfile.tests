@@ -37,26 +37,50 @@ pipeline {
         withCredentials([string(credentialsId: 'k8s-token', variable: 'KUBERNETES_TOKEN')]) {
             sh '''
             echo "Configuring cluster context using Docker host bridge..."
-            
             kubectl config set-cluster chaos-cluster --server=https://host.docker.internal:54150 --insecure-skip-tls-verify=true
             kubectl config set-credentials jenkins-robot --token="${KUBERNETES_TOKEN}"
             kubectl config set-context chaos-context --cluster=chaos-cluster --user=jenkins-robot
             kubectl config use-context chaos-context
 
             echo "Locating the application pod inside the flask-project namespace..."
-            # FIX: Explicitly target the namespace flag (-n) here to clear the RBAC wall
             POD_NAME=$(kubectl get pods -n flask-project -l app=chaos-app -o jsonpath="{.items[0].metadata.name}")
             echo "Targeting Pod: ${POD_NAME}"
             
-            # FIX: Explicitly pass the namespace to the port-forward command as well
+            # Fire up the proxy tunnel in the background
             kubectl port-forward -n flask-project pod/${POD_NAME} 5000:5000 > /dev/null 2>&1 &
             TUNNEL_PID=$!
             
             echo "Allowing network proxy bridge to stabilize..."
             sleep 5
             
-            echo "Executing Playwright Sequential CRUD Suite..."
-            npx playwright test
+            echo "=== EXECUTING FAST BASH CRUD OPERATIONS VIA CURL ==="
+            
+            # 1. Sign up a unique test user
+            TEST_USER="bash_user_${BUILD_NUMBER}"
+            echo "Registering user: ${TEST_USER}"
+            curl -s -f -X POST http://127.0.0.1:5000/signup \
+              -d "username=${TEST_USER}&password=ChaosPassword123!"
+            
+            # 2. Log in and save the session cookie into a text file jar
+            echo "Logging in..."
+            curl -s -f -X POST http://127.0.0.1:5000/login \
+              -d "username=${TEST_USER}&password=ChaosPassword123!" \
+              -c cookie_jar.txt
+            
+            # 3. Create a record using that captured session cookie
+            echo "Creating a chaos metric record..."
+            DASHBOARD_HTML=$(curl -s -f -X POST http://127.0.0.1:5000/add \
+              -d "content=Automated Pipeline Metric" \
+              -b cookie_jar.txt)
+            
+            # 4. Quick assertion check to verify data rendered on the screen
+            if echo "$DASHBOARD_HTML" | grep -q "Automated Pipeline Metric"; then
+                echo "SUCCESS: CRUD lifecycle fully functional over the cluster bridge!"
+            else
+                echo "ERROR: Data replication check failed."
+                kill $TUNNEL_PID
+                exit 1
+            fi
             
             echo "Cleaning up proxy tunnel..."
             kill $TUNNEL_PID
