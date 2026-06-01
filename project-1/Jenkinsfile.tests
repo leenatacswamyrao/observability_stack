@@ -32,27 +32,19 @@ pipeline {
                 }
             }
         }
-      stage('Bridge & Run CRUD Tests') {
+    stage('Bridge & Run CRUD Tests') {
     steps {
         sh '''
-        # 1. Target the app pod directly using its label (app=chaos-app)
-        # Change 'chaos-app' if your deployment uses a different label name
-        kubectl port-forward deployment/chaos-app 5000:5000 > /dev/null 2>&1 &
+        echo "=== DIAGNOSTIC LAYER: DISCOVERING KUBERNETES RESOURCES ==="
+        kubectl get services -n default
+        kubectl get deployments -n default
+        kubectl get pods -n default
+        echo "=========================================================="
         
-        TUNNEL_PID=$!
-        
-        # 2. Wait until local port 5000 is genuinely accepting traffic
-        echo "Waiting for the application tunnel to establish..."
-        timeout 15 bash -c 'until printf "" 2>>/dev/null >/dev/tcp/127.0.0.1/5000; do sleep 1; done'
-        echo "Application is reachable! Starting tests..."
-        
-        # 3. Run the tests
-        npx playwright test
-        
-        # 4. Clean up the tunnel safely
-        kill $TUNNEL_PID
+        # Temporary fallback to let the stage pass while we check the log output
+        exit 1
         '''
     }
-}
-   }
+}  
+    }
 }
