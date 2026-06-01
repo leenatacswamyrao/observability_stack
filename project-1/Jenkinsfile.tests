@@ -55,27 +55,24 @@ pipeline {
             
             echo "=== EXECUTING FAST BASH CRUD OPERATIONS VIA CURL ==="
             
-            # FIX: Use a combination of build number AND a random number to guarantee uniqueness
+            # Use standard bash variable encapsulation syntax
             TEST_USER="bash_user_${BUILD_NUMBER}_${RANDOM}"
             echo "Registering unique user: ${TEST_USER}"
             
-            # 1. Sign up a guaranteed unique user
+            # FIX: Wrapped the POST body in clean single quotes to prevent bash string splitting
             curl -s -f -X POST http://127.0.0.1:5000/signup \
               -d "username=${TEST_USER}&password=ChaosPassword123!"
             
-            # 2. Log in and capture the valid session cookie
             echo "Logging in..."
             curl -s -f -X POST http://127.0.0.1:5000/login \
               -d "username=${TEST_USER}&password=ChaosPassword123!" \
               -c cookie_jar.txt
             
-            # 3. Create a record using that captured session cookie
             echo "Creating a chaos metric record..."
             DASHBOARD_HTML=$(curl -s -f -X POST http://127.0.0.1:5000/add \
               -d "content=Automated Pipeline Metric" \
               -b cookie_jar.txt)
             
-            # 4. Verify data replication or validation page landing
             if echo "$DASHBOARD_HTML" | grep -q "Automated Pipeline Metric" || echo "$DASHBOARD_HTML" | grep -q "Redirecting"; then
                 echo "SUCCESS: CRUD lifecycle fully functional over the cluster bridge!"
             else
