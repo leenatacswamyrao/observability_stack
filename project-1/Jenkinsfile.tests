@@ -34,19 +34,18 @@ pipeline {
         }
     stage('Bridge & Run CRUD Tests') {
     steps {
-        // Inject your existing 'k8s-token' secret text into a standard environment variable
         withCredentials([string(credentialsId: 'k8s-token', variable: 'KUBERNETES_TOKEN')]) {
             sh '''
-            echo "Configuring cluster context using raw token..."
+            echo "Configuring cluster context using Docker host bridge..."
             
-            # Point kubectl directly to the internal cluster API server using the injected token
-            kubectl config set-cluster chaos-cluster --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true
+            # FIX: Point directly to the host machine's loopback port via Docker's internal DNS bridge
+            kubectl config set-cluster chaos-cluster --server=https://host.docker.internal:54150 --insecure-skip-tls-verify=true
+            
             kubectl config set-credentials jenkins-robot --token="${KUBERNETES_TOKEN}"
             kubectl config set-context chaos-context --cluster=chaos-cluster --user=jenkins-robot
             kubectl config use-context chaos-context
 
             echo "Locating the application pod..."
-            # Pull the pod name matching your deployment label dynamically
             POD_NAME=$(kubectl get pods -l app=chaos-app -o jsonpath="{.items[0].metadata.name}")
             echo "Targeting Pod: ${POD_NAME}"
             
