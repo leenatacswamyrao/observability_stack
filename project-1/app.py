@@ -10,7 +10,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'chaos_secret_key')
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL', 
-    'postgresql://chaos_user:chaos_password@postgres-service:5432/chaos_db'
+    'postgresql://chaos_user:chaos_password@postgres-service.flask-project.svc.cluster.local:5432/chaos_db'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
