@@ -1,0 +1,54 @@
+#apiVersion: v1
+#stringData:
+#  apiToken: ZHQwYzAxLlNONUFKSUtCWEJUNklLM0dPNjNIRUwySC5FVUVGNUFQUFZXRTVGM1JaNlFFQU5TU0VUMllEQkQyRUZOSDY0TU9CRDJPTUg3VVlKNk1VVVpXTlE2TUFXR0JI
+#  dataIngestToken: ZHQwYzAxLlNONUFKSUtCWEJUNklLM0dPNjNIRUwySC5FVUVGNUFQUFZXRTVGM1JaNlFFQU5TU0VUMllEQkQyRUZOSDY0TU9CRDJPTUg3VVlKNk1VVVpXTlE2TUFXR0JI
+#kind: Secret
+#metadata:
+#  name: chaos-app
+#  namespace: dynatrace
+#  labels:
+#    dynatrace.com/created-by: "dynatrace.kubernetes"
+#type: Opaque
+#---
+apiVersion: dynatrace.com/v1beta6
+kind: DynaKube
+metadata:
+  name: chaos-app
+  namespace: dynatrace
+  labels:
+    dynatrace.com/created-by: "dynatrace.kubernetes"
+  annotations:
+    feature.dynatrace.com/k8s-app-enabled: "true"
+spec:
+  apiUrl: https://xnb79639.live.dynatrace.com/api
+  tokens: chaos-app
+  
+  oneAgent:
+    applicationMonitoring: {}
+
+  activeGate:
+    capabilities:
+      - kubernetes-monitoring
+      - routing
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    replicas: 1
+
+  templates:
+    otelCollector:
+      imageRef:
+        repository: public.ecr.aws/dynatrace/dynatrace-otel-collector
+        tag: latest
+
+  telemetryIngest:
+    protocols:
+      - jaeger
+      - otlp
+      - statsd
+      - zipkin
+    serviceName: telemetry-ingest
