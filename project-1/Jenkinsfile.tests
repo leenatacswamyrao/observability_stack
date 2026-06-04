@@ -104,10 +104,18 @@ stage('Trigger Harness Performance Test') {
         
         // This curl block hits your newly created Harness trigger
         sh '''
-            curl -i -sS -X POST "https://app.harness.io/gateway/pipeline/api/webhook/custom/oGpz0k5-Tb-2s7juRdqfVA/v3?accountIdentifier=y7oF563xSAaNSxe1cEsX6w&orgIdentifier=default&projectIdentifier=MonitoringDemo&pipelineIdentifier=jmetercrudtests&triggerIdentifier=chaosjenkinscrud" \
-            -H "Content-Type: application/json" \
-            -d '{}'
-        '''
+           curl -X POST "https://app.harness.io/gateway/pipeline/api/webhook/custom/oGpz0k5-Tb-2s7juRdqfVA/v3?accountIdentifier=y7oF563xSAaNSxe1cEsX6w&orgIdentifier=default&projectIdentifier=MonitoringDemo&pipelineIdentifier=jmetercrudtests&triggerIdentifier=chaosjenkinscrud" \
+                -H "Content-Type: application/json" \
+                -d '{
+                      "branchName": "main",
+                      "build": {
+                                 "type": "branch",
+                                 "spec": {
+                                          "branch": "main"
+                                        }
+                              }
+                    }'
+            '''
     }
 }
     }
