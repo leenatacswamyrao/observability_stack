@@ -1,0 +1,754 @@
+2026-07-30 10:59:30,579 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2026-07-30 10:59:30,599 INFO o.a.j.JMeter: Loading user properties from: E:\apache-jmeter-5.6.3\apache-jmeter-5.6.3\bin\user.properties
+2026-07-30 10:59:30,638 INFO o.a.j.JMeter: Loading system properties from: E:\apache-jmeter-5.6.3\apache-jmeter-5.6.3\bin\system.properties
+2026-07-30 10:59:30,738 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2026-07-30 10:59:30,738 INFO o.a.j.JMeter: Version 5.6.3
+2026-07-30 10:59:30,738 INFO o.a.j.JMeter: java.version=1.8.0_341
+2026-07-30 10:59:30,738 INFO o.a.j.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+2026-07-30 10:59:30,738 INFO o.a.j.JMeter: os.name=Windows 10
+2026-07-30 10:59:30,828 INFO o.a.j.JMeter: os.arch=amd64
+2026-07-30 10:59:30,828 INFO o.a.j.JMeter: os.version=10.0
+2026-07-30 10:59:30,828 INFO o.a.j.JMeter: file.encoding=Cp1252
+2026-07-30 10:59:30,828 INFO o.a.j.JMeter: java.awt.headless=true
+2026-07-30 10:59:30,828 INFO o.a.j.JMeter: Max memory     =1073741824
+2026-07-30 10:59:30,829 INFO o.a.j.JMeter: Available Processors =8
+2026-07-30 10:59:30,847 INFO o.a.j.JMeter: Default Locale=English (EN)
+2026-07-30 10:59:30,848 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2026-07-30 10:59:30,848 INFO o.a.j.JMeter: JMeterHome=E:\apache-jmeter-5.6.3\apache-jmeter-5.6.3
+2026-07-30 10:59:30,848 INFO o.a.j.JMeter: user.dir  =D:\Projects\Repositories\observability_stack\flexcart
+2026-07-30 10:59:30,848 INFO o.a.j.JMeter: PWD       =D:\Projects\Repositories\observability_stack\flexcart
+2026-07-30 10:59:30,850 INFO o.a.j.JMeter: IP: 192.168.31.59 Name: DESKTOP-M5AUSPH FullName: host.docker.internal
+2026-07-30 10:59:30,874 INFO o.a.j.JMeter: Setting property 'jmeter.reportgenerator.outputdir' to:'D:\Projects\Repositories\observability_stack\flexcart\.\html_report'
+2026-07-30 10:59:30,877 INFO o.a.j.s.FileServer: Default base='D:\Projects\Repositories\observability_stack\flexcart'
+2026-07-30 10:59:30,881 INFO o.a.j.s.FileServer: Set new base='D:\Projects\Repositories\observability_stack\flexcart'
+2026-07-30 10:59:31,773 INFO o.a.j.s.SaveService: Testplan (JMX) version: 2.2. Testlog (JTL) version: 2.2
+2026-07-30 10:59:31,966 INFO o.a.j.s.SaveService: Using SaveService properties file encoding UTF-8
+2026-07-30 10:59:31,973 INFO o.a.j.s.SaveService: Using SaveService properties version 5.0
+2026-07-30 10:59:31,983 INFO o.a.j.s.SaveService: Loading file: flexcart.jmx
+2026-07-30 10:59:32,555 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/html is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-07-30 10:59:32,556 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xhtml+xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-07-30 10:59:32,556 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for application/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-07-30 10:59:32,556 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/xml is org.apache.jmeter.protocol.http.parser.LagartoBasedHtmlParser
+2026-07-30 10:59:32,556 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/vnd.wap.wml is org.apache.jmeter.protocol.http.parser.RegexpHTMLParser
+2026-07-30 10:59:32,556 INFO o.a.j.p.h.s.HTTPSamplerBase: Parser for text/css is org.apache.jmeter.protocol.http.parser.CssParser
+2026-07-30 10:59:33,376 INFO o.a.j.JMeter: Creating summariser <summary>
+2026-07-30 10:59:33,382 INFO o.a.j.r.d.ReportGenerator: ReportGenerator will use for Parsing the separator: ','
+2026-07-30 10:59:33,383 INFO o.a.j.r.d.ReportGenerator: Will generate report at end of test from  results file: results.jtl
+2026-07-30 10:59:33,383 INFO o.a.j.r.d.ReportGenerator: Reading report generator properties from: E:\apache-jmeter-5.6.3\apache-jmeter-5.6.3\bin\reportgenerator.properties
+2026-07-30 10:59:33,553 INFO o.a.j.r.d.ReportGenerator: Merging with JMeter properties
+2026-07-30 10:59:33,876 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.temp_dir' not found, using default value 'temp' instead.
+2026-07-30 10:59:33,881 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.apdex_per_transaction' not found, using default value 'null' instead.
+2026-07-30 10:59:33,881 INFO o.a.j.r.c.ReportGeneratorConfiguration: apdex_per_transaction is empty, not APDEX per transaction customization
+2026-07-30 10:59:33,881 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.sample_filter' not found, using default value 'null' instead.
+2026-07-30 10:59:33,881 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.report_title' not found, using default value 'null' instead.
+2026-07-30 10:59:33,881 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.start_date' not found, using default value 'null' instead.
+2026-07-30 10:59:33,881 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.end_date' not found, using default value 'null' instead.
+2026-07-30 10:59:33,881 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.date_format' not found, using default value 'null' instead.
+2026-07-30 10:59:33,886 INFO o.a.j.r.c.ReportGeneratorConfiguration: Will use date range start date: null, end date: null
+2026-07-30 10:59:34,017 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.totalTPS.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,017 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.activeThreadsOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,017 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.timeVsThreads.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,017 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimeDistribution.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,018 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.transactionsPerSecond.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,018 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentiles.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,018 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimePercentilesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,018 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.responseTimesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,018 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.connectTimeOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,018 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.graph.latenciesOverTime.exclude_controllers' not found, using default value 'false' instead.
+2026-07-30 10:59:34,019 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.filters_only_sample_series' not found, using default value 'true' instead.
+2026-07-30 10:59:34,019 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.series_filter' not found, using default value '' instead.
+2026-07-30 10:59:34,019 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.json.show_controllers_only' not found, using default value 'false' instead.
+2026-07-30 10:59:34,020 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.filters_only_sample_series' not found, using default value 'true' instead.
+2026-07-30 10:59:34,020 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.series_filter' not found, using default value '' instead.
+2026-07-30 10:59:34,020 INFO o.a.j.r.c.ReportGeneratorConfiguration: Property 'jmeter.reportgenerator.exporter.html.show_controllers_only' not found, using default value 'false' instead.
+2026-07-30 10:59:34,046 INFO o.a.j.e.StandardJMeterEngine: Running the test!
+2026-07-30 10:59:34,048 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-07-30 10:59:34,048 INFO o.a.j.s.SampleEvent: List of sample_variables: []
+2026-07-30 10:59:34,058 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must contain the string: '.functions.'
+2026-07-30 10:59:34,058 INFO o.a.j.e.u.CompoundVariable: Note: Function class names must not contain the string: '.gui.'
+2026-07-30 10:59:35,271 INFO o.a.j.JMeter: Running test (1785389375271)
+2026-07-30 10:59:35,327 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 1 : InsertUsers
+2026-07-30 10:59:35,327 INFO o.a.j.e.StandardJMeterEngine: Starting 1 threads for group InsertUsers.
+2026-07-30 10:59:35,327 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-07-30 10:59:35,328 INFO o.a.j.t.ThreadGroup: Starting thread group... number=1 threads=1 ramp-up=1 delayedStart=false
+2026-07-30 10:59:35,362 INFO o.a.j.t.ThreadGroup: Started thread group number 1
+2026-07-30 10:59:35,362 INFO o.a.j.e.StandardJMeterEngine: Starting ThreadGroup: 2 : FC_Login_Flow
+2026-07-30 10:59:35,362 INFO o.a.j.e.StandardJMeterEngine: Starting 200 threads for group FC_Login_Flow.
+2026-07-30 10:59:35,362 INFO o.a.j.e.StandardJMeterEngine: Thread will continue on error
+2026-07-30 10:59:35,362 INFO o.a.j.t.ThreadGroup: Starting thread group... number=2 threads=200 ramp-up=30 delayedStart=false
+2026-07-30 10:59:35,580 INFO o.a.j.t.ThreadGroup: Started thread group number 2
+2026-07-30 10:59:35,581 INFO o.a.j.e.StandardJMeterEngine: All thread groups have been started
+2026-07-30 10:59:35,806 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-1
+2026-07-30 10:59:35,810 INFO o.a.j.s.FileServer: Stored: D:/Projects/Repositories/observability_stack/flexcart/users.csv
+2026-07-30 10:59:35,818 INFO o.a.j.t.JMeterThread: Thread started: InsertUsers 1-1
+2026-07-30 10:59:35,857 INFO o.a.j.t.JMeterThread: Thread is done: InsertUsers 1-1
+2026-07-30 10:59:35,857 INFO o.a.j.t.JMeterThread: Thread finished: InsertUsers 1-1
+2026-07-30 10:59:35,942 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-2
+2026-07-30 10:59:36,085 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-3
+2026-07-30 10:59:36,262 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-4
+2026-07-30 10:59:36,404 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-5
+2026-07-30 10:59:36,530 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-6
+2026-07-30 10:59:36,698 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-7
+2026-07-30 10:59:36,853 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-8
+2026-07-30 10:59:36,980 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-9
+2026-07-30 10:59:37,124 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-10
+2026-07-30 10:59:37,265 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-11
+2026-07-30 10:59:37,442 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-12
+2026-07-30 10:59:37,568 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-13
+2026-07-30 10:59:37,710 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-14
+2026-07-30 10:59:37,890 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-15
+2026-07-30 10:59:38,032 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-16
+2026-07-30 10:59:38,191 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-17
+2026-07-30 10:59:38,321 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-18
+2026-07-30 10:59:38,493 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-19
+2026-07-30 10:59:38,619 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-20
+2026-07-30 10:59:38,646 INFO o.a.j.p.h.s.HTTPHCAbstractImpl: Local host = DESKTOP-M5AUSPH
+2026-07-30 10:59:38,655 INFO o.a.j.p.h.s.HTTPHC4Impl: HTTP request retry count = 3
+2026-07-30 10:59:38,657 INFO o.a.j.s.SampleResult: Note: Sample TimeStamps are START times
+2026-07-30 10:59:38,657 INFO o.a.j.s.SampleResult: sampleresult.default.encoding is set to UTF-8
+2026-07-30 10:59:38,657 INFO o.a.j.s.SampleResult: sampleresult.useNanoTime=true
+2026-07-30 10:59:38,657 INFO o.a.j.s.SampleResult: sampleresult.nanoThreadSleep=5000
+2026-07-30 10:59:38,780 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-21
+2026-07-30 10:59:38,930 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-22
+2026-07-30 10:59:39,087 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-23
+2026-07-30 10:59:39,211 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-24
+2026-07-30 10:59:39,364 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-25
+2026-07-30 10:59:39,497 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-26
+2026-07-30 10:59:39,651 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-27
+2026-07-30 10:59:39,794 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-28
+2026-07-30 10:59:39,974 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-29
+2026-07-30 10:59:40,123 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-30
+2026-07-30 10:59:40,254 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-31
+2026-07-30 10:59:40,404 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-32
+2026-07-30 10:59:40,543 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-33
+2026-07-30 10:59:40,714 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-34
+2026-07-30 10:59:40,854 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-35
+2026-07-30 10:59:40,997 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-36
+2026-07-30 10:59:41,145 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-37
+2026-07-30 10:59:41,291 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-38
+2026-07-30 10:59:41,430 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-39
+2026-07-30 10:59:41,580 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-40
+2026-07-30 10:59:41,725 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-41
+2026-07-30 10:59:41,907 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-42
+2026-07-30 10:59:42,031 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-43
+2026-07-30 10:59:42,176 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-44
+2026-07-30 10:59:42,349 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-45
+2026-07-30 10:59:42,477 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-46
+2026-07-30 10:59:42,636 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-47
+2026-07-30 10:59:42,790 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-48
+2026-07-30 10:59:42,948 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-49
+2026-07-30 10:59:43,106 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-50
+2026-07-30 10:59:43,254 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-51
+2026-07-30 10:59:43,399 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-52
+2026-07-30 10:59:43,554 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-53
+2026-07-30 10:59:43,699 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-54
+2026-07-30 10:59:43,847 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-55
+2026-07-30 10:59:44,000 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-56
+2026-07-30 10:59:44,151 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-57
+2026-07-30 10:59:44,294 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-58
+2026-07-30 10:59:44,449 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-59
+2026-07-30 10:59:44,596 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-60
+2026-07-30 10:59:44,745 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-61
+2026-07-30 10:59:44,895 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-62
+2026-07-30 10:59:45,043 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-63
+2026-07-30 10:59:45,194 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-64
+2026-07-30 10:59:45,342 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-65
+2026-07-30 10:59:45,493 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-66
+2026-07-30 10:59:45,635 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-67
+2026-07-30 10:59:45,782 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-68
+2026-07-30 10:59:45,923 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-69
+2026-07-30 10:59:46,079 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-70
+2026-07-30 10:59:46,208 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-71
+2026-07-30 10:59:46,350 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-72
+2026-07-30 10:59:46,496 INFO o.a.j.p.h.s.HTTPJavaImpl: Maximum connection retries = 0
+2026-07-30 10:59:46,498 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-73
+2026-07-30 10:59:46,645 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-74
+2026-07-30 10:59:46,794 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-75
+2026-07-30 10:59:46,948 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-76
+2026-07-30 10:59:47,093 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-77
+2026-07-30 10:59:47,255 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-78
+2026-07-30 10:59:47,395 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-79
+2026-07-30 10:59:47,541 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-80
+2026-07-30 10:59:47,691 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-81
+2026-07-30 10:59:47,839 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-82
+2026-07-30 10:59:47,994 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-83
+2026-07-30 10:59:48,141 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-84
+2026-07-30 10:59:48,287 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-85
+2026-07-30 10:59:48,437 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-86
+2026-07-30 10:59:48,585 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-87
+2026-07-30 10:59:48,737 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-88
+2026-07-30 10:59:48,886 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-89
+2026-07-30 10:59:49,035 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-90
+2026-07-30 10:59:49,177 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-91
+2026-07-30 10:59:49,331 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-92
+2026-07-30 10:59:49,478 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-93
+2026-07-30 10:59:49,631 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-94
+2026-07-30 10:59:49,781 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-95
+2026-07-30 10:59:49,929 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-96
+2026-07-30 10:59:50,075 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-97
+2026-07-30 10:59:50,227 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-98
+2026-07-30 10:59:50,377 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-99
+2026-07-30 10:59:50,515 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-100
+2026-07-30 10:59:50,666 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-101
+2026-07-30 10:59:50,817 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-102
+2026-07-30 10:59:50,962 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-103
+2026-07-30 10:59:51,104 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-104
+2026-07-30 10:59:51,264 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-105
+2026-07-30 10:59:51,414 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-106
+2026-07-30 10:59:51,557 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-107
+2026-07-30 10:59:51,702 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-108
+2026-07-30 10:59:51,855 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-109
+2026-07-30 10:59:52,020 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-110
+2026-07-30 10:59:52,150 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-111
+2026-07-30 10:59:52,297 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-112
+2026-07-30 10:59:52,451 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-113
+2026-07-30 10:59:52,600 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-114
+2026-07-30 10:59:52,754 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-115
+2026-07-30 10:59:52,902 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-116
+2026-07-30 10:59:53,052 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-117
+2026-07-30 10:59:53,196 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-118
+2026-07-30 10:59:53,341 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-119
+2026-07-30 10:59:53,496 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-120
+2026-07-30 10:59:53,651 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-121
+2026-07-30 10:59:53,795 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-122
+2026-07-30 10:59:53,949 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-123
+2026-07-30 10:59:54,102 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-124
+2026-07-30 10:59:54,254 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-125
+2026-07-30 10:59:54,400 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-126
+2026-07-30 10:59:54,554 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-127
+2026-07-30 10:59:54,701 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-128
+2026-07-30 10:59:54,853 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-129
+2026-07-30 10:59:54,998 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-130
+2026-07-30 10:59:55,153 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-131
+2026-07-30 10:59:55,302 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-132
+2026-07-30 10:59:55,443 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-133
+2026-07-30 10:59:55,588 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-134
+2026-07-30 10:59:55,731 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-135
+2026-07-30 10:59:55,878 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-136
+2026-07-30 10:59:56,032 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-137
+2026-07-30 10:59:56,194 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-138
+2026-07-30 10:59:56,327 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-139
+2026-07-30 10:59:56,478 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-140
+2026-07-30 10:59:56,627 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-141
+2026-07-30 10:59:56,795 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-142
+2026-07-30 10:59:56,922 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-143
+2026-07-30 10:59:57,072 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-144
+2026-07-30 10:59:57,218 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-145
+2026-07-30 10:59:57,366 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-146
+2026-07-30 10:59:57,538 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-147
+2026-07-30 10:59:57,663 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-148
+2026-07-30 10:59:57,815 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-149
+2026-07-30 10:59:57,980 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-150
+2026-07-30 10:59:58,111 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-151
+2026-07-30 10:59:58,266 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-152
+2026-07-30 10:59:58,411 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-153
+2026-07-30 10:59:58,577 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-154
+2026-07-30 10:59:58,711 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-155
+2026-07-30 10:59:58,860 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-156
+2026-07-30 10:59:59,008 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-157
+2026-07-30 10:59:59,161 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-158
+2026-07-30 10:59:59,316 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-159
+2026-07-30 10:59:59,462 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-160
+2026-07-30 10:59:59,626 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-161
+2026-07-30 10:59:59,751 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-162
+2026-07-30 10:59:59,898 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-163
+2026-07-30 11:00:00,038 INFO o.a.j.r.Summariser: summary +    581 in 00:00:25 =   23.5/s Avg:    13 Min:     3 Max:   419 Err:     0 (0.00%) Active: 163 Started: 164 Finished: 1
+2026-07-30 11:00:00,047 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-164
+2026-07-30 11:00:00,197 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-165
+2026-07-30 11:00:00,384 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-166
+2026-07-30 11:00:00,498 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-167
+2026-07-30 11:00:00,654 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-168
+2026-07-30 11:00:00,792 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-169
+2026-07-30 11:00:00,951 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-170
+2026-07-30 11:00:01,102 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-171
+2026-07-30 11:00:01,253 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-172
+2026-07-30 11:00:01,427 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-173
+2026-07-30 11:00:01,553 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-174
+2026-07-30 11:00:01,727 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-175
+2026-07-30 11:00:01,876 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-176
+2026-07-30 11:00:02,001 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-177
+2026-07-30 11:00:02,174 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-178
+2026-07-30 11:00:02,323 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-179
+2026-07-30 11:00:02,451 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-180
+2026-07-30 11:00:02,595 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-181
+2026-07-30 11:00:02,747 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-182
+2026-07-30 11:00:02,921 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-183
+2026-07-30 11:00:03,049 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-184
+2026-07-30 11:00:03,195 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-185
+2026-07-30 11:00:03,369 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-186
+2026-07-30 11:00:03,519 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-187
+2026-07-30 11:00:03,646 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-188
+2026-07-30 11:00:03,812 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-189
+2026-07-30 11:00:03,949 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-190
+2026-07-30 11:00:04,085 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-191
+2026-07-30 11:00:04,239 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-192
+2026-07-30 11:00:04,392 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-193
+2026-07-30 11:00:04,541 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-194
+2026-07-30 11:00:04,683 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-195
+2026-07-30 11:00:04,841 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-196
+2026-07-30 11:00:04,984 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-197
+2026-07-30 11:00:05,137 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-198
+2026-07-30 11:00:05,270 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-199
+2026-07-30 11:00:05,417 INFO o.a.j.t.JMeterThread: Thread started: FC_Login_Flow 2-200
+2026-07-30 11:00:30,055 INFO o.a.j.r.Summariser: summary +   1939 in 00:00:30 =   64.6/s Avg:    10 Min:     3 Max:   447 Err:     0 (0.00%) Active: 200 Started: 201 Finished: 1
+2026-07-30 11:00:30,057 INFO o.a.j.r.Summariser: summary =   2520 in 00:00:55 =   46.0/s Avg:    10 Min:     3 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:01:00,010 INFO o.a.j.r.Summariser: summary +   2009 in 00:00:30 =   67.1/s Avg:     5 Min:     2 Max:    81 Err:     0 (0.00%) Active: 200 Started: 201 Finished: 1
+2026-07-30 11:01:00,010 INFO o.a.j.r.Summariser: summary =   4529 in 00:01:25 =   53.4/s Avg:     8 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:01:30,008 INFO o.a.j.r.Summariser: summary +   2013 in 00:00:30 =   67.1/s Avg:     5 Min:     2 Max:    77 Err:     0 (0.00%) Active: 200 Started: 201 Finished: 1
+2026-07-30 11:01:30,008 INFO o.a.j.r.Summariser: summary =   6542 in 00:01:55 =   57.0/s Avg:     7 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:02:00,010 INFO o.a.j.r.Summariser: summary +   1984 in 00:00:30 =   66.1/s Avg:     4 Min:     3 Max:    52 Err:     0 (0.00%) Active: 200 Started: 201 Finished: 1
+2026-07-30 11:02:00,011 INFO o.a.j.r.Summariser: summary =   8526 in 00:02:25 =   58.9/s Avg:     6 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:02:30,001 INFO o.a.j.r.Summariser: summary +   1993 in 00:00:30 =   66.5/s Avg:     4 Min:     2 Max:    69 Err:     0 (0.00%) Active: 200 Started: 201 Finished: 1
+2026-07-30 11:02:30,001 INFO o.a.j.r.Summariser: summary =  10519 in 00:02:55 =   60.2/s Avg:     6 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:03:00,002 INFO o.a.j.r.Summariser: summary +   1998 in 00:00:30 =   66.6/s Avg:     4 Min:     2 Max:   135 Err:     0 (0.00%) Active: 200 Started: 201 Finished: 1
+2026-07-30 11:03:00,002 INFO o.a.j.r.Summariser: summary =  12517 in 00:03:25 =   61.1/s Avg:     6 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:03:24,436 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-5
+2026-07-30 11:03:24,436 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-5
+2026-07-30 11:03:29,555 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-9
+2026-07-30 11:03:29,555 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-9
+2026-07-30 11:03:30,001 INFO o.a.j.r.Summariser: summary +   1993 in 00:00:30 =   66.4/s Avg:     6 Min:     2 Max:   241 Err:     0 (0.00%) Active: 198 Started: 201 Finished: 3
+2026-07-30 11:03:30,001 INFO o.a.j.r.Summariser: summary =  14510 in 00:03:55 =   61.8/s Avg:     6 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:03:30,480 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-4
+2026-07-30 11:03:30,564 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-4
+2026-07-30 11:03:32,054 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-6
+2026-07-30 11:03:32,090 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-6
+2026-07-30 11:03:32,267 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-53
+2026-07-30 11:03:32,268 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-53
+2026-07-30 11:03:33,990 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-35
+2026-07-30 11:03:33,990 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-35
+2026-07-30 11:03:34,622 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-26
+2026-07-30 11:03:34,622 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-26
+2026-07-30 11:03:34,685 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-16
+2026-07-30 11:03:34,685 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-16
+2026-07-30 11:03:34,689 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-39
+2026-07-30 11:03:34,689 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-39
+2026-07-30 11:03:35,034 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-17
+2026-07-30 11:03:35,068 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-17
+2026-07-30 11:03:35,164 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-55
+2026-07-30 11:03:35,164 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-55
+2026-07-30 11:03:35,311 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-15
+2026-07-30 11:03:35,311 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-15
+2026-07-30 11:03:35,635 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-29
+2026-07-30 11:03:35,635 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-29
+2026-07-30 11:03:35,919 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-51
+2026-07-30 11:03:35,919 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-51
+2026-07-30 11:03:36,228 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-27
+2026-07-30 11:03:36,296 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-27
+2026-07-30 11:03:36,643 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-73
+2026-07-30 11:03:36,643 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-73
+2026-07-30 11:03:36,678 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-44
+2026-07-30 11:03:36,678 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-44
+2026-07-30 11:03:36,783 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-2
+2026-07-30 11:03:36,783 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-2
+2026-07-30 11:03:37,230 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-10
+2026-07-30 11:03:37,293 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-10
+2026-07-30 11:03:37,404 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-7
+2026-07-30 11:03:37,404 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-7
+2026-07-30 11:03:37,762 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-66
+2026-07-30 11:03:37,762 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-66
+2026-07-30 11:03:38,107 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-31
+2026-07-30 11:03:38,107 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-31
+2026-07-30 11:03:38,486 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-8
+2026-07-30 11:03:38,599 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-8
+2026-07-30 11:03:38,760 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-12
+2026-07-30 11:03:38,760 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-12
+2026-07-30 11:03:39,238 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-14
+2026-07-30 11:03:39,238 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-14
+2026-07-30 11:03:39,274 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-23
+2026-07-30 11:03:39,274 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-23
+2026-07-30 11:03:39,300 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-24
+2026-07-30 11:03:39,300 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-24
+2026-07-30 11:03:39,325 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-1
+2026-07-30 11:03:39,325 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-1
+2026-07-30 11:03:39,527 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-50
+2026-07-30 11:03:39,527 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-50
+2026-07-30 11:03:39,949 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-46
+2026-07-30 11:03:40,033 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-46
+2026-07-30 11:03:40,044 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-86
+2026-07-30 11:03:40,044 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-86
+2026-07-30 11:03:40,067 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-13
+2026-07-30 11:03:40,067 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-13
+2026-07-30 11:03:40,208 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-19
+2026-07-30 11:03:40,209 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-19
+2026-07-30 11:03:40,382 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-25
+2026-07-30 11:03:40,382 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-25
+2026-07-30 11:03:40,579 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-37
+2026-07-30 11:03:40,582 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-37
+2026-07-30 11:03:40,769 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-11
+2026-07-30 11:03:40,769 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-11
+2026-07-30 11:03:40,830 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-42
+2026-07-30 11:03:40,831 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-42
+2026-07-30 11:03:41,049 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-40
+2026-07-30 11:03:41,049 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-40
+2026-07-30 11:03:41,135 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-32
+2026-07-30 11:03:41,136 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-32
+2026-07-30 11:03:41,329 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-36
+2026-07-30 11:03:41,329 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-36
+2026-07-30 11:03:41,657 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-77
+2026-07-30 11:03:41,735 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-89
+2026-07-30 11:03:41,749 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-77
+2026-07-30 11:03:41,749 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-89
+2026-07-30 11:03:41,865 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-20
+2026-07-30 11:03:41,866 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-20
+2026-07-30 11:03:42,070 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-34
+2026-07-30 11:03:42,070 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-34
+2026-07-30 11:03:42,080 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-58
+2026-07-30 11:03:42,080 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-58
+2026-07-30 11:03:42,199 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-22
+2026-07-30 11:03:42,199 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-22
+2026-07-30 11:03:42,459 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-61
+2026-07-30 11:03:42,459 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-61
+2026-07-30 11:03:42,511 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-81
+2026-07-30 11:03:42,511 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-81
+2026-07-30 11:03:42,745 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-3
+2026-07-30 11:03:42,745 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-3
+2026-07-30 11:03:42,801 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-136
+2026-07-30 11:03:42,801 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-136
+2026-07-30 11:03:42,947 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-45
+2026-07-30 11:03:42,947 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-45
+2026-07-30 11:03:43,833 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-49
+2026-07-30 11:03:43,833 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-49
+2026-07-30 11:03:43,971 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-90
+2026-07-30 11:03:43,999 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-60
+2026-07-30 11:03:44,044 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-60
+2026-07-30 11:03:44,044 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-90
+2026-07-30 11:03:44,057 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-72
+2026-07-30 11:03:44,057 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-72
+2026-07-30 11:03:44,120 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-65
+2026-07-30 11:03:44,120 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-65
+2026-07-30 11:03:44,167 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-114
+2026-07-30 11:03:44,167 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-114
+2026-07-30 11:03:44,760 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-56
+2026-07-30 11:03:44,760 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-56
+2026-07-30 11:03:44,847 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-30
+2026-07-30 11:03:44,847 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-30
+2026-07-30 11:03:44,865 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-43
+2026-07-30 11:03:44,865 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-43
+2026-07-30 11:03:44,890 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-18
+2026-07-30 11:03:44,890 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-18
+2026-07-30 11:03:45,168 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-52
+2026-07-30 11:03:45,227 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-52
+2026-07-30 11:03:45,437 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-94
+2026-07-30 11:03:45,437 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-94
+2026-07-30 11:03:45,500 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-68
+2026-07-30 11:03:45,500 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-68
+2026-07-30 11:03:45,542 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-80
+2026-07-30 11:03:45,542 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-80
+2026-07-30 11:03:45,595 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-62
+2026-07-30 11:03:45,596 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-62
+2026-07-30 11:03:45,964 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-95
+2026-07-30 11:03:45,965 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-95
+2026-07-30 11:03:46,014 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-113
+2026-07-30 11:03:46,014 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-113
+2026-07-30 11:03:46,105 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-48
+2026-07-30 11:03:46,105 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-48
+2026-07-30 11:03:46,210 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-88
+2026-07-30 11:03:46,210 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-88
+2026-07-30 11:03:46,216 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-63
+2026-07-30 11:03:46,216 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-63
+2026-07-30 11:03:46,366 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-33
+2026-07-30 11:03:46,366 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-33
+2026-07-30 11:03:46,500 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-78
+2026-07-30 11:03:46,568 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-78
+2026-07-30 11:03:46,576 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-28
+2026-07-30 11:03:46,577 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-28
+2026-07-30 11:03:46,746 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-64
+2026-07-30 11:03:46,746 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-64
+2026-07-30 11:03:46,903 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-41
+2026-07-30 11:03:46,903 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-41
+2026-07-30 11:03:47,063 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-67
+2026-07-30 11:03:47,063 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-67
+2026-07-30 11:03:47,164 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-137
+2026-07-30 11:03:47,164 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-137
+2026-07-30 11:03:47,511 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-70
+2026-07-30 11:03:47,511 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-70
+2026-07-30 11:03:47,579 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-47
+2026-07-30 11:03:47,580 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-47
+2026-07-30 11:03:47,617 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-133
+2026-07-30 11:03:47,617 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-133
+2026-07-30 11:03:47,782 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-83
+2026-07-30 11:03:47,782 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-83
+2026-07-30 11:03:47,815 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-71
+2026-07-30 11:03:47,815 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-71
+2026-07-30 11:03:48,406 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-59
+2026-07-30 11:03:48,459 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-59
+2026-07-30 11:03:48,555 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-106
+2026-07-30 11:03:48,555 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-106
+2026-07-30 11:03:48,828 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-118
+2026-07-30 11:03:48,828 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-118
+2026-07-30 11:03:48,830 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-93
+2026-07-30 11:03:48,830 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-93
+2026-07-30 11:03:48,962 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-69
+2026-07-30 11:03:48,962 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-69
+2026-07-30 11:03:49,273 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-75
+2026-07-30 11:03:49,273 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-75
+2026-07-30 11:03:49,435 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-54
+2026-07-30 11:03:49,435 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-54
+2026-07-30 11:03:49,555 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-100
+2026-07-30 11:03:49,555 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-100
+2026-07-30 11:03:49,596 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-92
+2026-07-30 11:03:49,596 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-92
+2026-07-30 11:03:50,008 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-82
+2026-07-30 11:03:50,010 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-84
+2026-07-30 11:03:50,039 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-84
+2026-07-30 11:03:50,039 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-82
+2026-07-30 11:03:50,364 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-87
+2026-07-30 11:03:50,364 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-87
+2026-07-30 11:03:50,633 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-116
+2026-07-30 11:03:50,633 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-116
+2026-07-30 11:03:51,311 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-57
+2026-07-30 11:03:51,311 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-57
+2026-07-30 11:03:51,340 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-122
+2026-07-30 11:03:51,340 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-122
+2026-07-30 11:03:51,451 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-98
+2026-07-30 11:03:51,451 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-98
+2026-07-30 11:03:51,572 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-115
+2026-07-30 11:03:51,643 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-115
+2026-07-30 11:03:51,743 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-79
+2026-07-30 11:03:51,744 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-79
+2026-07-30 11:03:51,825 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-102
+2026-07-30 11:03:51,825 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-102
+2026-07-30 11:03:51,844 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-76
+2026-07-30 11:03:51,844 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-76
+2026-07-30 11:03:51,909 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-21
+2026-07-30 11:03:51,909 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-21
+2026-07-30 11:03:51,942 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-111
+2026-07-30 11:03:51,942 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-111
+2026-07-30 11:03:52,024 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-101
+2026-07-30 11:03:52,024 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-101
+2026-07-30 11:03:52,224 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-103
+2026-07-30 11:03:52,224 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-103
+2026-07-30 11:03:52,336 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-38
+2026-07-30 11:03:52,388 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-129
+2026-07-30 11:03:52,401 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-129
+2026-07-30 11:03:52,401 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-38
+2026-07-30 11:03:52,432 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-121
+2026-07-30 11:03:52,432 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-121
+2026-07-30 11:03:52,563 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-190
+2026-07-30 11:03:52,563 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-190
+2026-07-30 11:03:52,711 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-132
+2026-07-30 11:03:52,711 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-132
+2026-07-30 11:03:52,749 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-74
+2026-07-30 11:03:52,749 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-74
+2026-07-30 11:03:52,815 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-159
+2026-07-30 11:03:52,815 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-159
+2026-07-30 11:03:52,868 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-135
+2026-07-30 11:03:52,868 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-135
+2026-07-30 11:03:53,031 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-156
+2026-07-30 11:03:53,031 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-156
+2026-07-30 11:03:53,502 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-109
+2026-07-30 11:03:53,502 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-109
+2026-07-30 11:03:53,538 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-107
+2026-07-30 11:03:53,538 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-107
+2026-07-30 11:03:53,573 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-105
+2026-07-30 11:03:53,573 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-105
+2026-07-30 11:03:53,635 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-117
+2026-07-30 11:03:53,687 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-125
+2026-07-30 11:03:53,656 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-96
+2026-07-30 11:03:53,707 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-125
+2026-07-30 11:03:53,707 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-117
+2026-07-30 11:03:53,707 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-96
+2026-07-30 11:03:53,925 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-110
+2026-07-30 11:03:53,925 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-110
+2026-07-30 11:03:54,073 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-148
+2026-07-30 11:03:54,073 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-148
+2026-07-30 11:03:54,323 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-163
+2026-07-30 11:03:54,324 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-163
+2026-07-30 11:03:54,693 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-99
+2026-07-30 11:03:54,693 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-99
+2026-07-30 11:03:54,806 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-108
+2026-07-30 11:03:54,806 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-108
+2026-07-30 11:03:54,909 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-120
+2026-07-30 11:03:54,910 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-120
+2026-07-30 11:03:55,182 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-141
+2026-07-30 11:03:55,227 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-141
+2026-07-30 11:03:55,321 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-85
+2026-07-30 11:03:55,321 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-85
+2026-07-30 11:03:55,543 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-131
+2026-07-30 11:03:55,543 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-131
+2026-07-30 11:03:55,706 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-146
+2026-07-30 11:03:55,706 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-146
+2026-07-30 11:03:55,979 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-104
+2026-07-30 11:03:55,979 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-104
+2026-07-30 11:03:56,018 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-175
+2026-07-30 11:03:56,018 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-175
+2026-07-30 11:03:56,156 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-91
+2026-07-30 11:03:56,156 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-91
+2026-07-30 11:03:56,274 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-179
+2026-07-30 11:03:56,275 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-179
+2026-07-30 11:03:56,314 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-155
+2026-07-30 11:03:56,314 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-155
+2026-07-30 11:03:56,348 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-140
+2026-07-30 11:03:56,348 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-140
+2026-07-30 11:03:56,848 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-149
+2026-07-30 11:03:56,966 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-149
+2026-07-30 11:03:57,019 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-169
+2026-07-30 11:03:57,019 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-169
+2026-07-30 11:03:57,219 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-124
+2026-07-30 11:03:57,220 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-124
+2026-07-30 11:03:57,460 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-123
+2026-07-30 11:03:57,460 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-123
+2026-07-30 11:03:57,572 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-184
+2026-07-30 11:03:57,573 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-184
+2026-07-30 11:03:57,606 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-127
+2026-07-30 11:03:57,606 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-127
+2026-07-30 11:03:57,727 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-142
+2026-07-30 11:03:57,727 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-142
+2026-07-30 11:03:57,780 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-143
+2026-07-30 11:03:57,780 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-143
+2026-07-30 11:03:57,817 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-126
+2026-07-30 11:03:57,877 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-126
+2026-07-30 11:03:57,978 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-119
+2026-07-30 11:03:57,978 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-119
+2026-07-30 11:03:58,573 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-178
+2026-07-30 11:03:58,573 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-178
+2026-07-30 11:03:58,728 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-128
+2026-07-30 11:03:58,728 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-128
+2026-07-30 11:03:58,848 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-158
+2026-07-30 11:03:58,848 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-158
+2026-07-30 11:03:59,268 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-144
+2026-07-30 11:03:59,268 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-144
+2026-07-30 11:03:59,423 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-112
+2026-07-30 11:03:59,423 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-112
+2026-07-30 11:03:59,425 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-97
+2026-07-30 11:03:59,425 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-97
+2026-07-30 11:03:59,587 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-167
+2026-07-30 11:03:59,587 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-167
+2026-07-30 11:03:59,606 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-130
+2026-07-30 11:03:59,606 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-130
+2026-07-30 11:04:00,003 INFO o.a.j.r.Summariser: summary +   1406 in 00:00:30 =   46.9/s Avg:     7 Min:     2 Max:   200 Err:     0 (0.00%) Active: 44 Started: 201 Finished: 157
+2026-07-30 11:04:00,003 INFO o.a.j.r.Summariser: summary =  15916 in 00:04:25 =   60.1/s Avg:     6 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:04:00,004 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-164
+2026-07-30 11:04:00,004 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-164
+2026-07-30 11:04:00,387 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-171
+2026-07-30 11:04:00,387 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-171
+2026-07-30 11:04:00,659 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-176
+2026-07-30 11:04:00,667 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-176
+2026-07-30 11:04:00,685 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-168
+2026-07-30 11:04:00,686 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-168
+2026-07-30 11:04:00,728 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-147
+2026-07-30 11:04:00,729 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-147
+2026-07-30 11:04:00,908 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-152
+2026-07-30 11:04:00,908 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-152
+2026-07-30 11:04:00,994 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-197
+2026-07-30 11:04:00,994 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-197
+2026-07-30 11:04:01,021 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-138
+2026-07-30 11:04:01,021 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-138
+2026-07-30 11:04:01,069 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-174
+2026-07-30 11:04:01,069 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-174
+2026-07-30 11:04:01,214 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-172
+2026-07-30 11:04:01,214 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-172
+2026-07-30 11:04:01,227 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-157
+2026-07-30 11:04:01,227 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-157
+2026-07-30 11:04:01,318 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-183
+2026-07-30 11:04:01,318 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-183
+2026-07-30 11:04:01,555 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-154
+2026-07-30 11:04:01,555 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-154
+2026-07-30 11:04:01,626 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-188
+2026-07-30 11:04:01,626 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-188
+2026-07-30 11:04:01,659 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-195
+2026-07-30 11:04:01,659 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-195
+2026-07-30 11:04:01,939 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-145
+2026-07-30 11:04:01,939 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-145
+2026-07-30 11:04:02,029 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-192
+2026-07-30 11:04:02,029 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-192
+2026-07-30 11:04:02,114 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-150
+2026-07-30 11:04:02,114 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-150
+2026-07-30 11:04:02,320 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-182
+2026-07-30 11:04:02,320 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-182
+2026-07-30 11:04:02,591 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-193
+2026-07-30 11:04:02,591 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-193
+2026-07-30 11:04:02,928 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-200
+2026-07-30 11:04:03,130 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-200
+2026-07-30 11:04:03,188 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-186
+2026-07-30 11:04:03,188 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-186
+2026-07-30 11:04:03,822 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-162
+2026-07-30 11:04:03,911 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-162
+2026-07-30 11:04:03,947 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-134
+2026-07-30 11:04:03,947 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-134
+2026-07-30 11:04:03,992 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-160
+2026-07-30 11:04:03,992 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-160
+2026-07-30 11:04:04,458 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-177
+2026-07-30 11:04:04,459 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-177
+2026-07-30 11:04:04,644 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-194
+2026-07-30 11:04:04,645 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-194
+2026-07-30 11:04:05,296 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-151
+2026-07-30 11:04:05,296 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-151
+2026-07-30 11:04:05,697 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-180
+2026-07-30 11:04:05,698 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-180
+2026-07-30 11:04:05,763 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-153
+2026-07-30 11:04:05,763 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-153
+2026-07-30 11:04:06,110 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-139
+2026-07-30 11:04:06,112 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-139
+2026-07-30 11:04:06,246 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-181
+2026-07-30 11:04:06,247 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-181
+2026-07-30 11:04:06,257 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-185
+2026-07-30 11:04:06,257 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-185
+2026-07-30 11:04:06,341 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-191
+2026-07-30 11:04:06,341 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-191
+2026-07-30 11:04:07,141 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-170
+2026-07-30 11:04:07,141 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-170
+2026-07-30 11:04:07,196 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-199
+2026-07-30 11:04:07,196 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-199
+2026-07-30 11:04:07,594 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-187
+2026-07-30 11:04:07,594 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-187
+2026-07-30 11:04:08,724 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-173
+2026-07-30 11:04:08,763 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-173
+2026-07-30 11:04:08,941 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-166
+2026-07-30 11:04:08,941 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-166
+2026-07-30 11:04:08,961 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-161
+2026-07-30 11:04:08,962 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-161
+2026-07-30 11:04:09,498 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-196
+2026-07-30 11:04:09,530 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-196
+2026-07-30 11:04:10,329 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-165
+2026-07-30 11:04:10,329 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-165
+2026-07-30 11:04:10,748 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-198
+2026-07-30 11:04:10,748 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-198
+2026-07-30 11:04:10,750 INFO o.a.j.t.JMeterThread: Thread is done: FC_Login_Flow 2-189
+2026-07-30 11:04:10,750 INFO o.a.j.t.JMeterThread: Thread finished: FC_Login_Flow 2-189
+2026-07-30 11:04:10,750 INFO o.a.j.e.StandardJMeterEngine: Notifying test listeners of end of test
+2026-07-30 11:04:10,750 INFO o.a.j.s.FileServer: Close: D:/Projects/Repositories/observability_stack/flexcart/users.csv
+2026-07-30 11:04:10,751 INFO o.a.j.r.Summariser: summary +     84 in 00:00:11 =    7.8/s Avg:     6 Min:     3 Max:    31 Err:     0 (0.00%) Active: 0 Started: 201 Finished: 201
+2026-07-30 11:04:10,751 INFO o.a.j.r.Summariser: summary =  16000 in 00:04:35 =   58.1/s Avg:     6 Min:     2 Max:   447 Err:     0 (0.00%)
+2026-07-30 11:04:10,752 INFO o.a.j.JMeter: Generating Dashboard
+2026-07-30 11:04:10,752 INFO o.a.j.r.d.ReportGenerator: Flushing result collector before report Generation
+2026-07-30 11:04:10,794 INFO o.a.j.r.p.NormalizerSampleConsumer: Using format, 'ms', to parse timeStamp field
+2026-07-30 11:04:14,662 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): beginDate produced 0 samples
+2026-07-30 11:04:14,662 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.AggregateConsumer#stopProducing(): endDate produced 0 samples
+2026-07-30 11:04:14,665 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ApdexSummaryConsumer#stopProducing(): apdexSummary produced 0 samples
+2026-07-30 11:04:14,665 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.RequestsSummaryConsumer#stopProducing(): requestsSummary produced 0 samples
+2026-07-30 11:04:14,871 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.StatisticsSummaryConsumer#stopProducing(): statisticsSummary produced 0 samples
+2026-07-30 11:04:14,889 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.Top5ErrorsBySamplerConsumer#stopProducing(): top5ErrorsBySampler produced 0 samples
+2026-07-30 11:04:14,889 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.ErrorsSummaryConsumer#stopProducing(): errorsSummary produced 0 samples
+2026-07-30 11:04:14,889 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.HitsPerSecondGraphConsumer#stopProducing(): hitsPerSecond produced 0 samples
+2026-07-30 11:04:15,198 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyVSRequestGraphConsumer#stopProducing(): latencyVsRequest produced 0 samples
+2026-07-30 11:04:15,200 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.SyntheticResponseTimeDistributionGraphConsumer#stopProducing(): syntheticResponseTimeDistribution produced 0 samples
+2026-07-30 11:04:15,200 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.BytesThroughputGraphConsumer#stopProducing(): bytesThroughputOverTime produced 0 samples
+2026-07-30 11:04:15,200 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.CodesPerSecondGraphConsumer#stopProducing(): codesPerSecond produced 0 samples
+2026-07-30 11:04:15,356 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeVSRequestGraphConsumer#stopProducing(): responseTimeVsRequest produced 0 samples
+2026-07-30 11:04:15,360 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): startIntervalControlerFilter produced 112000 samples
+2026-07-30 11:04:15,360 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TotalTPSGraphConsumer#stopProducing(): totalTPS produced 0 samples
+2026-07-30 11:04:15,360 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ActiveThreadsGraphConsumer#stopProducing(): activeThreadsOverTime produced 0 samples
+2026-07-30 11:04:15,360 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TimeVSThreadGraphConsumer#stopProducing(): timeVsThreads produced 0 samples
+2026-07-30 11:04:15,361 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeDistributionGraphConsumer#stopProducing(): responseTimeDistribution produced 0 samples
+2026-07-30 11:04:15,363 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.TransactionsPerSecondGraphConsumer#stopProducing(): transactionsPerSecond produced 0 samples
+2026-07-30 11:04:15,363 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesGraphConsumer#stopProducing(): responseTimePercentiles produced 0 samples
+2026-07-30 11:04:15,369 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimePercentilesOverTimeGraphConsumer#stopProducing(): responseTimePercentilesOverTime produced 0 samples
+2026-07-30 11:04:15,371 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ResponseTimeOverTimeGraphConsumer#stopProducing(): responseTimesOverTime produced 0 samples
+2026-07-30 11:04:15,371 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.ConnectTimeOverTimeGraphConsumer#stopProducing(): connectTimeOverTime produced 0 samples
+2026-07-30 11:04:15,371 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.graph.impl.LatencyOverTimeGraphConsumer#stopProducing(): latenciesOverTime produced 0 samples
+2026-07-30 11:04:15,371 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): nameFilter produced 240000 samples
+2026-07-30 11:04:15,371 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.FilterConsumer#stopProducing(): dateRangeFilter produced 48000 samples
+2026-07-30 11:04:15,372 INFO o.a.j.r.p.AbstractSampleConsumer: class org.apache.jmeter.report.processor.NormalizerSampleConsumer#stopProducing(): normalizer produced 16000 samples
+2026-07-30 11:04:15,372 INFO o.a.j.r.p.CsvFileSampleSource: produce(): 16000 samples produced in 4s 502 ms on channel 0
+2026-07-30 11:04:15,372 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'json' of className:'org.apache.jmeter.report.dashboard.JsonExporter'
+2026-07-30 11:04:15,525 INFO o.a.j.r.d.JsonExporter: Found data for consumer statisticsSummary in context
+2026-07-30 11:04:15,525 INFO o.a.j.r.d.JsonExporter: Creating statistics for overall
+2026-07-30 11:04:15,526 INFO o.a.j.r.d.JsonExporter: Creating statistics for other transactions
+2026-07-30 11:04:15,526 INFO o.a.j.r.d.JsonExporter: Checking output folder
+2026-07-30 11:04:15,527 INFO o.a.j.r.d.JsonExporter: Writing statistics JSON to D:\Projects\Repositories\observability_stack\flexcart\.\html_report\statistics.json
+2026-07-30 11:04:15,970 INFO o.a.j.r.d.ReportGenerator: Exporting data using exporter:'html' of className:'org.apache.jmeter.report.dashboard.HtmlTemplateExporter'
+2026-07-30 11:04:16,057 INFO o.a.j.r.d.HtmlTemplateExporter: Will generate dashboard in folder: D:\Projects\Repositories\observability_stack\flexcart\.\html_report
+2026-07-30 11:04:22,832 INFO o.a.j.r.d.HtmlTemplateExporter: Report will be generated in: D:\Projects\Repositories\observability_stack\flexcart\.\html_report, creating folder structure
+2026-07-30 11:04:22,844 INFO o.a.j.r.d.TemplateVisitor: Copying folder from 'E:\apache-jmeter-5.6.3\apache-jmeter-5.6.3\bin\report-template' to 'D:\Projects\Repositories\observability_stack\flexcart\.\html_report', got message: D:\Projects\Repositories\observability_stack\flexcart\.\html_report, found non empty folder with following content [D:\Projects\Repositories\observability_stack\flexcart\.\html_report\statistics.json], will be ignored
+2026-07-30 11:04:40,910 INFO o.a.j.JMeter: Dashboard generated

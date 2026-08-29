@@ -1,0 +1,81 @@
+services:
+  # 0. FlexCart Frontend Web UI
+  flexcart-frontend:
+    image: node:18-alpine
+    container_name: flexcart-frontend
+    command: sh -c "npx serve -s -l 3000"
+    ports:
+      - "3000:3000"
+
+  # 1. Identity Microservice (Auth & Logins)
+  identity-service:
+    image: kennethreitz/httpbin
+    container_name: identity-service
+    ports:
+      - "8081:80"
+    environment:
+      - SERVICE_NAME=identity-service
+
+  # 2. Catalog Microservice (Product Search)
+  catalog-service:
+    image: kennethreitz/httpbin
+    container_name: catalog-service
+    ports:
+      - "8082:80"
+    environment:
+      - SERVICE_NAME=catalog-service
+
+  # 3. Checkout Microservice (Cart & Payments)
+  checkout-service:
+    image: kennethreitz/httpbin
+    container_name: checkout-service
+    ports:
+      - "8083:80"
+    environment:
+      - SERVICE_NAME=checkout-service
+
+  # 4. PostgreSQL Database
+  flexcart-db:
+    image: postgres:15-alpine
+    container_name: flexcart-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=flexcart_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password123
+
+  # 5. Redis Cache
+  flexcart-cache:
+    image: redis:alpine
+    container_name: flexcart-cache
+    ports:
+      - "6379:6379"
+
+  # 6. Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # 7. to export docker container metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+
+  # 8.  Grafana monitoring
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3010:3000" 
